@@ -1,0 +1,75 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.3.50'
+        spekVersion = '1.1.5'
+        slf4jVersion = '1.7.25'
+        poiVersion = '3.12'
+        konfVersion = '0.20.0'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
+    }
+}
+
+apply plugin: 'kotlin'
+
+group 'com.github.sbaldin'
+version '0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    //apache poi
+    // Include if need POI: compile project(":lib:common:xls")
+    compile 'com.uchuhimo:konf-core:0.20.0'
+    compile 'com.uchuhimo:konf-yaml:0.20.0'
+    compile "org.apache.poi:poi:${poiVersion}"
+    compile "org.apache.poi:poi-ooxml:${poiVersion}"
+    compile "org.apache.poi:poi-ooxml-schemas:${poiVersion}"
+    compile "org.apache.poi:poi-scratchpad:${poiVersion}"
+
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "org.slf4j:slf4j-log4j12:${slf4jVersion}"
+
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+
+    testCompile("org.jetbrains.spek:spek-api:$spekVersion") {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testCompile("org.jetbrains.spek:spek-data-driven-extension:$spekVersion") {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testRuntime("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion") {
+        exclude group: 'org.junit.platform'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+build.dependsOn buildZip
+
