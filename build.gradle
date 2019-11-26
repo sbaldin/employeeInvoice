@@ -1,6 +1,7 @@
+
 buildscript {
     ext {
-        kotlinVersion = '1.3.50'
+        kotlinVersion = '1.3.60'
         spekVersion = '1.1.5'
         slf4jVersion = '1.7.25'
         poiVersion = '3.12'
@@ -9,28 +10,38 @@ buildscript {
 
     repositories {
         mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
     }
 }
 
-apply plugin: 'kotlin'
+plugins {
+    id "org.jetbrains.kotlin.jvm" version '1.3.60'
+    id "application"
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
 
 group 'com.github.sbaldin'
 version '0.1'
+
+
+mainClassName = "com.github.sbaldin.invoicer.ApplicationKt"
+defaultTasks 'run'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testCompile "org.jetbrains.kotlin:kotlin-test"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit"
 
-    //apache poi
-    // Include if need POI: compile project(":lib:common:xls")
     compile 'com.uchuhimo:konf-core:0.20.0'
     compile 'com.uchuhimo:konf-yaml:0.20.0'
     compile "org.apache.poi:poi:${poiVersion}"
@@ -62,14 +73,17 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
+//build.dependsOn shadowJar
 
-task buildZip(type: Zip) {
-    from compileJava
-    from processResources
-    into('lib') {
-        from configurations.runtime
+jar {
+    zip64 true
+    manifest {
+        attributes "Implementation-Title": "Invoice Generator"
+        attributes "Implementation-Version": version
+        attributes "Main-Class" : mainClassName
     }
+    // This line of code recursively collects and copies all of a project's files
+    // and adds them to the JAR itself. One can extend this task, to skip certain
+    // files or particular types at will
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
-
-build.dependsOn buildZip
-

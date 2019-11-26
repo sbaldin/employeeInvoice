@@ -1,5 +1,6 @@
 app:
   runType: Both
+  outputPath: /home/sbaldin
   sendEmail: myEmail@gmail.com
 employee:
   name: Ivan Ivanov

@@ -6,6 +6,7 @@ import com.uchuhimo.konf.toValue
 import javafx.application.Application
 import org.slf4j.LoggerFactory
 
+
 val log = LoggerFactory.getLogger(Application::class.java)
 
 fun main(args: Array<String>) {
@@ -16,16 +17,15 @@ fun main(args: Array<String>) {
     val bankingDetails = readBankingDetails(appConfPath)
     log.info("Сonfigs was loaded.")
     InvoiceGenerator(appConf, employee, bankingDetails).apply {
-            generate()
+        generate()
     }
 }
-
 
 private fun readAppConf(appConfPath: String) =
     Config().from.yaml.file(appConfPath).at("app").toValue<AppConf>()
 
 private fun readEmployee(appConfPath: String) =
-    Config().from.yaml.file(appConfPath).at("employee").toValue<Employee>()
+    Config().from.yaml.file(appConfPath).at("employee").toValue<EmployeeDetails>()
 
 private fun readBankingDetails(appConfPath: String) =
     Config().from.yaml.file(appConfPath).at("bankingDetails").toValue<BankingDetails>()
