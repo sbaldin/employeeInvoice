@@ -96,5 +96,5 @@ application{
 }
 
 runShadow{
-    args = ["../resource/main/application.yaml"]
+    args = ["./build/resources/main/application.yaml"]
 }

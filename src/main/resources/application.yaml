@@ -1,17 +1,17 @@
 app:
   runType: Both
   outputPath: /home/sbaldin
-  sendEmail: myEmail@gmail.com
+  sendToEmail: myEmail@gmail.com
 employee:
   name: Ivan Ivanov
-  invoiceDate: Janurary 1, 1970
-  contractDate: Janurary 1, 1970
+  invoiceDate: 1970-01-01
+  contractDate: 1970-01-01
   serviceProvider: Platform Development
   vacationDaysInMonth: 0
   vacationDaysInYear: 0
   monthRate: 0
   additionalExpenses: 0
-bankingDetails:
+banking:
   name: AO «ALFA-BANK»
   accountNumber: 00000 000 0000 0000 0000
   country: Russia

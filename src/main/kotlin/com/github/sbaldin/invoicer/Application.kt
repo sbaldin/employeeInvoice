@@ -1,5 +1,8 @@
 package com.github.sbaldin.invoicer
 
+import com.github.sbaldin.invoicer.model.AppConf
+import com.github.sbaldin.invoicer.model.BankingDetails
+import com.github.sbaldin.invoicer.model.EmployeeDetails
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
 import com.uchuhimo.konf.toValue
@@ -10,22 +13,34 @@ import org.slf4j.LoggerFactory
 val log = LoggerFactory.getLogger(Application::class.java)
 
 fun main(args: Array<String>) {
-    log.info("args:" + args.joinToString())
+    log.info("Args:" + args.joinToString())
+    log.info("Working Directory = " +
+            System.getProperty("user.dir"));
     val appConfPath = args[0]
-    val appConf = readAppConf(appConfPath)
-    val employee = readEmployee(appConfPath)
-    val bankingDetails = readBankingDetails(appConfPath)
-    log.info("Сonfigs was loaded.")
-    InvoiceGenerator(appConf, employee, bankingDetails).apply {
+    val configs = ConfigHolder(readAppConf(appConfPath), readEmployee(appConfPath), readBankingDetails(appConfPath))
+    log.info("Configs was loaded.")
+    InvoiceGenerator(configs.appConf, configs.employeeDetails, configs.bankingDetails).apply {
         generate()
     }
 }
 
-private fun readAppConf(appConfPath: String) =
-    Config().from.yaml.file(appConfPath).at("app").toValue<AppConf>()
+private fun readAppConf(appConfPath: String, resourcePath: String ="application.yaml") =
+    Config().from.yaml.file(appConfPath)
+            .from.yaml.resource(resourcePath)
+            .at("app").toValue<AppConf>()
 
-private fun readEmployee(appConfPath: String) =
-    Config().from.yaml.file(appConfPath).at("employee").toValue<EmployeeDetails>()
+private fun readEmployee(appConfPath: String, resourcePath: String = "application.yaml") =
+    Config().from.yaml.file(appConfPath)
+        .from.yaml.resource(resourcePath)
+        .at("employee").toValue<EmployeeDetails>()
 
-private fun readBankingDetails(appConfPath: String) =
-    Config().from.yaml.file(appConfPath).at("bankingDetails").toValue<BankingDetails>()
+private fun readBankingDetails(appConfPath: String, resourcePath: String ="application.yaml") =
+    Config().from.yaml.file(appConfPath)
+            .from.yaml.resource(resourcePath)
+            .at("banking").toValue<BankingDetails>()
+
+data class ConfigHolder(
+    val appConf: AppConf,
+    val employeeDetails: EmployeeDetails,
+    val bankingDetails: BankingDetails
+)

@@ -1,8 +1,9 @@
 package com.github.sbaldin.invoicer
 
-import org.apache.poi.ss.usermodel.CellStyle
+import com.github.sbaldin.invoicer.model.AppConf
+import com.github.sbaldin.invoicer.model.BankingDetails
+import com.github.sbaldin.invoicer.model.EmployeeDetails
 import org.apache.poi.ss.usermodel.IndexedColors
-import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -36,8 +37,8 @@ class InvoiceGenerator(
             var rowIndex = generateSequence(1) {  it + 1 }.takeWhile { it < 100 }
             setRowValue(rowIndex.single(), 0, "${employee.name} RiskMatch Invoice")
             setRowValue(rowIndex.single(), 0, "Contract: dated as of ${employee.contractDate}")
-            setRowValue(rowIndex.single(), 0, "Invoice number: ${employee.invoiceNumber}")
-            setRowValue(rowIndex.single(), 0, "Date of service: ${employee.dateOfService}")
+            setRowValue(rowIndex.single(), 0, "Invoice number: ${employee.invoiceNumber()}")
+            setRowValue(rowIndex.single(), 0, "Date of service: ${employee.dateOfService()}")
             rowIndex = rowIndex.drop(2)
             setRowValue(rowIndex.single(), 1, employee.vacationDaysInMonth)
             setRowValue(rowIndex.single(), 1, employee.vacationDaysInYear)
