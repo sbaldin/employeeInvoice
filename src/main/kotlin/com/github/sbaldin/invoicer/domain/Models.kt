@@ -1,6 +1,5 @@
-package com.github.sbaldin.invoicer.model
+package com.github.sbaldin.invoicer.domain
 
-import com.uchuhimo.konf.ConfigSpec
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -10,12 +9,6 @@ enum class RunTypeEnum {
     Banking,
     Both
 }
-
-data class AppConf(
-    val runType: RunTypeEnum,
-    val outputPath: String,
-    val sendToEmail: String
-)
 
 /**
  *
@@ -60,7 +53,7 @@ data class EmployeeDetails
     val additionalExpenses: Int
 ) {
 
-    fun invoiceDate() = SimpleDateFormat("MMMMM dd, yyyy").format(Date())
+    fun formattedInvoiceDate() = SimpleDateFormat("MMMMM dd, yyyy").format(invoiceDate)!!
     fun invoiceNumber() = LocalDate.now().run { "$year-${month.value}-SB" }
     fun dateOfService() = SimpleDateFormat("MMMMM yyyy").format(Date())
 

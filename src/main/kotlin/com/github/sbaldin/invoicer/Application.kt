@@ -1,8 +1,8 @@
 package com.github.sbaldin.invoicer
 
-import com.github.sbaldin.invoicer.model.AppConf
-import com.github.sbaldin.invoicer.model.BankingDetails
-import com.github.sbaldin.invoicer.model.EmployeeDetails
+import com.github.sbaldin.invoicer.domain.AppConf
+import com.github.sbaldin.invoicer.domain.BankingDetails
+import com.github.sbaldin.invoicer.domain.EmployeeDetails
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
 import com.uchuhimo.konf.toValue
@@ -14,8 +14,7 @@ val log = LoggerFactory.getLogger(Application::class.java)
 
 fun main(args: Array<String>) {
     log.info("Args:" + args.joinToString())
-    log.info("Working Directory = " +
-            System.getProperty("user.dir"));
+    log.info("Working Directory = ${System.getProperty("user.dir")}")
     val appConfPath = args[0]
     val configs = ConfigHolder(readAppConf(appConfPath), readEmployee(appConfPath), readBankingDetails(appConfPath))
     log.info("Configs was loaded.")
