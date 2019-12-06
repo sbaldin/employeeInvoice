@@ -1,28 +1,26 @@
 package com.github.sbaldin.invoicer
 
-import com.github.sbaldin.invoicer.domain.AppConf
-import com.github.sbaldin.invoicer.domain.BankingDetails
-import com.github.sbaldin.invoicer.domain.EmployeeDetails
+import com.github.sbaldin.invoicer.domain.*
+import com.github.sbaldin.invoicer.generator.LocalBankInvoice
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFTableRow
 import java.io.File
+import java.util.*
 
 
 class InvoiceGenerator(
     val appConf: AppConf,
     val employee: EmployeeDetails,
-    val bankingDetails: BankingDetails
+    val localBankingDetails: LocalBankingDetails,
+    val foreignBankingDetails: ForeignBankingDetails
 ) {
-    fun generate() {
-        fillInEmployerTemplate()
-//        when (appConf.runType) {
-//            RunTypeEnum.Banking -> generateBanking()
-//            RunTypeEnum.Employer -> fillInEmployerTemplate()
-//            RunTypeEnum.Both -> generateBoth()
-//        }
 
+    fun generate() {
+        LocalBankInvoice(appConf, employee, localBankingDetails, foreignBankingDetails).generate()
     }
 
     private fun generateBoth() {
@@ -30,15 +28,16 @@ class InvoiceGenerator(
     }
 
 
-    private fun fillInEmployerTemplate() {
-        val workbook = XSSFWorkbook(appConf.templatePath)
+    private fun fillInForiengBankReport() {
+        val workbook = XSSFWorkbook(appConf.foreignTemplatePath)
         workbook.getSheetAt(0).apply {
             var rowIndex = 0
             setRowValue(rowIndex++, 0, "${employee.name} RiskMatch Invoice")
-            setRowValue(rowIndex++, 0, "Contract: dated as of ${employee.formattedInvoiceDate()}")
+            setRowValue(rowIndex++, 0, "${employee.name} RiskMatch Invoice")
+            setRowValue(rowIndex++, 0, "Contract: dated as of ${employee.formattedContractDate()}")
             setRowValue(rowIndex++, 0, "Invoice number: ${employee.invoiceNumber()}")
             setRowValue(rowIndex++, 0, "Date of service: ${employee.dateOfService()}")
-            rowIndex+= 3
+            rowIndex += 2
             setRowValue(rowIndex++, 1, employee.vacationDaysInMonth)
             setRowValue(rowIndex++, 1, employee.vacationDaysInYear)
             rowIndex++
@@ -46,13 +45,13 @@ class InvoiceGenerator(
             setRowValue(rowIndex++, 1, employee.additionalExpenses)
             rowIndex++
             setRowValue(rowIndex++, 1, employee.monthRate + employee.additionalExpenses)
-            rowIndex+= 3
-            setRowValue(rowIndex++, 1, bankingDetails.name)
-            setRowValue(rowIndex++, 1, bankingDetails.accountNumber)
-            setRowValue(rowIndex++, 1, bankingDetails.country)
-            setRowValue(rowIndex++, 1, bankingDetails.bankAddress)
-            setRowValue(rowIndex++, 1, bankingDetails.beneficiaryName)
-            setRowValue(rowIndex, 1, bankingDetails.bankAddress)
+            rowIndex += 3
+            setRowValue(rowIndex++, 1, localBankingDetails.name)
+            setRowValue(rowIndex++, 1, localBankingDetails.accountNumber)
+            setRowValue(rowIndex++, 1, localBankingDetails.country)
+            setRowValue(rowIndex++, 1, localBankingDetails.address)
+            setRowValue(rowIndex++, 1, localBankingDetails.beneficiaryName)
+            setRowValue(rowIndex, 1, localBankingDetails.address)
         }
         workbook.write(File(appConf.outputPath + "/invoice_test.xlsx").outputStream())
     }
@@ -68,11 +67,6 @@ class InvoiceGenerator(
                 setCellValue(value)
             }
         }
-    }
-
-
-    private fun generateBanking() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 

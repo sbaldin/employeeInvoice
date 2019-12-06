@@ -1,8 +1,6 @@
 package com.github.sbaldin.invoicer
 
-import com.github.sbaldin.invoicer.domain.AppConf
-import com.github.sbaldin.invoicer.domain.BankingDetails
-import com.github.sbaldin.invoicer.domain.EmployeeDetails
+import com.github.sbaldin.invoicer.domain.*
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
 import com.uchuhimo.konf.toValue
@@ -14,11 +12,14 @@ val log = LoggerFactory.getLogger(Application::class.java)
 
 fun main(args: Array<String>) {
     log.info("Args:" + args.joinToString())
-    log.info("Working Directory = ${System.getProperty("user.dir")}")
     val appConfPath = args[0]
-    val configs = ConfigHolder(readAppConf(appConfPath), readEmployee(appConfPath), readBankingDetails(appConfPath))
-    log.info("Configs was loaded.")
-    InvoiceGenerator(configs.appConf, configs.employeeDetails, configs.bankingDetails).apply {
+    log.info("Application config path:$appConfPath")
+
+    InvoiceGenerator(
+        readAppConf(appConfPath),
+        readEmployee(appConfPath),
+        readLocalBankingDetails(appConfPath),
+        readForeignBankingDetails(appConfPath)).apply {
         generate()
     }
 }
@@ -33,13 +34,19 @@ private fun readEmployee(appConfPath: String, resourcePath: String = "applicatio
         .from.yaml.resource(resourcePath)
         .at("employee").toValue<EmployeeDetails>()
 
-private fun readBankingDetails(appConfPath: String, resourcePath: String ="application.yaml") =
+private fun readLocalBankingDetails(appConfPath: String, resourcePath: String ="application.yaml") =
     Config().from.yaml.file(appConfPath)
             .from.yaml.resource(resourcePath)
-            .at("banking").toValue<BankingDetails>()
+            .at("banking").at("local").toValue<LocalBankingDetails>()
 
-data class ConfigHolder(
+private fun readForeignBankingDetails(appConfPath: String, resourcePath: String ="application.yaml") =
+    Config().from.yaml.file(appConfPath)
+            .from.yaml.resource(resourcePath)
+            .at("banking").at("foreign").toValue<ForeignBankingDetails>()
+
+data class AppContext(
     val appConf: AppConf,
     val employeeDetails: EmployeeDetails,
-    val bankingDetails: BankingDetails
+    val localBankingDetails: LocalBankingDetails,
+    val foreignBankingDetails: ForeignBankingDetails
 )

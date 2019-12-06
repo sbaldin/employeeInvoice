@@ -1,8 +1,11 @@
 package com.github.sbaldin.invoicer.domain
 
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 enum class RunTypeEnum {
     Employer,
@@ -10,39 +13,23 @@ enum class RunTypeEnum {
     Both
 }
 
-/**
- *
- * BankingDetails:
-name: AO «ALFA-BANK»
-accountNumber: 00000 000 0000 0000 0000
-country: Russia
-bankAddress: 27 Kalanchevskaya str., Moscow, 107078, tel +7 495 755-58-58, SWIFT ALFARUMM
-beneficiaryName: IP Ivanov Ivan Ivanovich
-beneficiaryAdress: PR. LENINA, D. 1, KV. 1, KEMEROVO, RUSSIA, 650000
- */
-data class BankingDetails
-    (
+data class LocalBankingDetails(
     val name: String,
     val accountNumber: String,
     val country: String,
-    val bankAddress: String,
+    val address: String,
     val beneficiaryName: String,
-    val beneficiaryAdress: String
+    val beneficiaryAddress: String
 )
 
-/**
- * Employee:
-name: Ivan Ivanov
-invoiceDate: Janurary 1, 1970
-ContractDate: Janurary 1, 1970
-serviceProvider: Platform Development
-vacationDaysInMonth: 0
-vacationDaysInYear: 0
-monthRate: 0
-additionalExpenses: 0
- */
-data class EmployeeDetails
-    (
+data class ForeignBankingDetails(
+    val name: String,
+    val accountNumber: String,
+    val contractorName: String,
+    val address: String
+)
+
+data class EmployeeDetails(
     val name: String,
     val invoiceDate: Date,
     val contractDate: Date,
@@ -53,7 +40,10 @@ data class EmployeeDetails
     val additionalExpenses: Int
 ) {
 
-    fun formattedInvoiceDate() = SimpleDateFormat("MMMMM dd, yyyy").format(invoiceDate)!!
+    fun formattedContractDate() = SimpleDateFormat("dd.MM.yyyy").format(invoiceDate)
+    fun formattedInvoiceDate(locale: Locale)= SimpleDateFormat("dd MMMMM yyyy", locale).format(invoiceDate)
+    fun formattedPaymentDeadline(locale: Locale) = LocalDate.now().plusDays(15).format(DateTimeFormatter.ofPattern("dd MMMM yyyy", locale))
+
     fun invoiceNumber() = LocalDate.now().run { "$year-${month.value}-SB" }
     fun dateOfService() = SimpleDateFormat("MMMMM yyyy").format(Date())
 
