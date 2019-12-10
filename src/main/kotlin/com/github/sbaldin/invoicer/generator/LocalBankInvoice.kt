@@ -4,9 +4,7 @@ import com.github.sbaldin.invoicer.domain.AppConf
 import com.github.sbaldin.invoicer.domain.EmployeeDetails
 import com.github.sbaldin.invoicer.domain.ForeignBankingDetails
 import com.github.sbaldin.invoicer.domain.LocalBankingDetails
-import org.apache.poi.xwpf.usermodel.XWPFDocument
-import org.apache.poi.xwpf.usermodel.XWPFStyle
-import org.apache.poi.xwpf.usermodel.XWPFTableRow
+import org.apache.poi.xwpf.usermodel.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
 import java.io.File
 import java.math.BigInteger
@@ -27,12 +25,17 @@ class LocalBankInvoice(
             val paragraph = createParagraph()
             val run = paragraph.createRun()
             run.setText("Инвойс № ${employee.invoiceNumber()} от ${employee.formattedInvoiceDate(Locale("ru"))}")
+            run.fontFamily = "Roboto"
+            run.isBold = true
             paragraph.style = "Heading1"
+            paragraph.alignment = ParagraphAlignment.CENTER
+            setSingleLineSpacing(paragraph)
 
             createMonthRateTable()
 
             createParagraph()
-            createParagraph().createRun().setText("Оплатить в срок до ${employee.formattedPaymentDeadline(Locale("ru"))}.")
+            val createParagraph = createParagraph()
+            createParagraph.createRun().setText("Оплатить в срок до ${employee.formattedPaymentDeadline(Locale("ru"))}.")
             createParagraph()
             createParagraph().createRun().setText("Выставлен:")
 
@@ -55,17 +58,17 @@ class LocalBankInvoice(
             //create first row
             //create first row
             val tableRowOne: XWPFTableRow = rows[0]
-            tableRowOne.getCell(0).text = "Описание услуг"
-            tableRowOne.getCell(1).text = "стоимость"
+            setTextWithDefaultStyle(tableRowOne.getCell(0), "Описание услуг")
+            setTextWithDefaultStyle(tableRowOne.getCell(1), "стоимость")
 
             val tableRowTwo: XWPFTableRow = rows[1]
             //TODO fix format here
-            tableRowTwo.getCell(0).text = "Разработка и поддержка программного обеспечения по договору " +
-                                                            "об оказании услуг от ${employee.formattedContractDate()}" +
-                                                            " за ${employee.formattedInvoiceDate(
-                                                                Locale("ru")
-                                                            )}."
-            tableRowTwo.getCell(1).text = "$ ${employee.monthRate}"
+            val jobDesc = "Разработка и поддержка программного обеспечения по договору " +
+                    "об оказании услуг от ${employee.formattedContractDate()}" +
+                    " за ${employee.formattedInvoiceDate(Locale("ru"))}."
+
+            setTextWithDefaultStyle(tableRowTwo.getCell(0), jobDesc)
+            setTextWithDefaultStyle(tableRowTwo.getCell(1), "$ ${employee.monthRate}")
         }
         createParagraph().body.insertTable(0, monthRateTable)
     }
@@ -148,5 +151,28 @@ class LocalBankInvoice(
         val styles = createStyles()
         style.type = STStyleType.PARAGRAPH
         styles.addStyle(style)
+    }
+
+
+
+    private fun setTextWithDefaultStyle(cell: XWPFTableCell, text: String) {
+        cell.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+        //Can't get first paragraph with elegant way, looks like ugly code is major feature of Apache POI
+        val ctP: CTP = if (cell.ctTc.sizeOfPArray() == 0) cell.ctTc.addNewP() else cell.ctTc.getPArray(0)
+        val par = XWPFParagraph(ctP, cell)
+        setSingleLineSpacing(par)
+        par.alignment = ParagraphAlignment.CENTER
+        val run = par.createRun()
+        run.setText(text)
+    }
+
+    private fun setSingleLineSpacing(paragraph: XWPFParagraph) {
+        var ppr = paragraph.ctp.pPr
+        if (ppr == null) ppr = paragraph.ctp.addNewPPr()
+        val spacing = if (ppr!!.isSetSpacing) ppr.spacing else ppr.addNewSpacing()
+        spacing.after = BigInteger.valueOf(100)
+        spacing.before = BigInteger.valueOf(100)
+        spacing.lineRule = STLineSpacingRule.AUTO
+        spacing.line = BigInteger.valueOf(240)
     }
 }
