@@ -48,6 +48,14 @@ dependencies {
     compile "org.apache.poi:poi-ooxml:${poiVersion}"
     compile "org.apache.poi:poi-ooxml-schemas:${poiVersion}"
     compile "org.apache.poi:poi-scratchpad:${poiVersion}"
+    compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.core', version: '1.0.6'
+    compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.pdf', version: '1.0.6'
+    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.itext.extension', version: '2.0.2'
+    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.1'
+    compile group: 'org.apache.poi', name: 'ooxml-schemas', version: '1.4'
+
+
+
 
 
     compile "org.slf4j:slf4j-api:${slf4jVersion}"

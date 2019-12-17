@@ -1,24 +1,23 @@
-package com.github.sbaldin.invoicer.generator
+package com.github.sbaldin.invoicer.generator.invoice
 
-import com.github.sbaldin.invoicer.domain.AppConf
 import com.github.sbaldin.invoicer.domain.EmployeeDetails
 import com.github.sbaldin.invoicer.domain.ForeignBankingDetails
 import com.github.sbaldin.invoicer.domain.LocalBankingDetails
+import org.apache.poi.POIXMLDocument
 import org.apache.poi.xwpf.usermodel.*
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
-import java.io.File
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STLineSpacingRule
 import java.math.BigInteger
 import java.util.*
 
 
 class LocalBankInvoice(
-    private val appConf: AppConf,
     private val employee: EmployeeDetails,
     private val localBankingDetails: LocalBankingDetails,
     private val foreignBankingDetails: ForeignBankingDetails
 ) : InvoiceGenerator {
 
-    override fun generate() {
+    override fun generate(): Invoice {
         val document = XWPFDocument()
         document.apply {
             singleLineParagraph("Инвойс № ${employee.invoiceNumber()} от ${employee.formattedInvoiceDate(Locale("ru"))}") {
@@ -46,10 +45,7 @@ class LocalBankInvoice(
                 setDoublerLineSpacing(it)
             }
         }
-        File(appConf.outputPath + "/invoice_test.docx").outputStream().apply {
-            document.write(this)
-            close()
-        }
+        return Invoice(name = "${employee.name}_invoice.docx", document = document)
     }
 
     private fun XWPFDocument.createMonthRateTable() {
@@ -108,6 +104,7 @@ class LocalBankInvoice(
         titleRun.setText("Получатель:")
         setDoublerLineSpacing(titleParagraph)
         val localBankDetailsTable = createTable(4, 2).apply {
+
             //create first row
             //create first row
             val bankName: XWPFTableRow = getRow(0)

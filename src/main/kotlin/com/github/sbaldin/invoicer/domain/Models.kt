@@ -8,8 +8,8 @@ import java.util.*
 
 
 enum class RunTypeEnum {
-    Employer,
-    Banking,
+    ForeignInvoice,
+    LocalInvoice,
     Both
 }
 
