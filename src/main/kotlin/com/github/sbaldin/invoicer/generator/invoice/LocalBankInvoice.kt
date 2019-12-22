@@ -7,6 +7,7 @@ import org.apache.poi.POIXMLDocument
 import org.apache.poi.xwpf.usermodel.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STLineSpacingRule
+import java.io.File
 import java.math.BigInteger
 import java.util.*
 
@@ -52,6 +53,7 @@ class LocalBankInvoice(
         val monthRateTable = createTable(2, 2).apply {
             //create first row
             //create first row
+            
             val tableRowOne: XWPFTableRow = rows[0]
             setTextWithDefaultStyle(tableRowOne.getCell(0), "Описание услуг")
             setTextWithDefaultStyle(tableRowOne.getCell(1), "стоимость")
