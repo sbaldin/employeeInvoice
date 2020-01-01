@@ -2,6 +2,7 @@ package com.github.sbaldin.invoicer
 
 import com.github.sbaldin.invoicer.domain.*
 import com.github.sbaldin.invoicer.generator.InvoiceFactory
+import com.github.sbaldin.invoicer.processor.SaveAsPdfProcessor
 import com.github.sbaldin.invoicer.processor.SaveToFileProcessor
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
@@ -45,7 +46,8 @@ fun main(args: Array<String>) {
         readForeignBankingDetails(appConfPath)
     )
 
-    val invoices = invoiceFactory.getInvoiceList(RunTypeEnum.Both)
+    val invoices = invoiceFactory.getOfficeInvoiceList(RunTypeEnum.Both)
     SaveToFileProcessor(appConf.outputPath).process(invoices = invoices)
+    SaveAsPdfProcessor("./phantomjs_lin64", "./rasterize.js").process("invoice_foreign.html",appConf.outputPath + "/invoice_foreign.pdf")
     log.info("Invoices generation finished.")
 }

@@ -1,6 +1,6 @@
 package com.github.sbaldin.invoicer.processor
 
-import com.github.sbaldin.invoicer.generator.invoice.Invoice
+import com.github.sbaldin.invoicer.generator.invoice.poi.Invoice
 import org.slf4j.LoggerFactory
 import java.io.File
 
