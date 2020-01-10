@@ -1,19 +1,24 @@
 package com.github.sbaldin.invoicer.domain
 
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-enum class RunTypeEnum {
-    ForeignInvoice,
-    LocalInvoice,
-    Both
+enum class AppRunTypeEnum {
+    FOREIGN_BANK_INVOICE,
+    LOCAL_BANK_INVOICE,
+    BOTH
 }
 
-data class LocalBankingDetails(
+
+enum class ResultFileTypeEnum(val title: String) {
+    PDF("Application will produce full-filled pdf files with signatures"),
+    OFFICE("Application will produce editable docx and xlsx files without signature.")
+}
+
+data class LocalBankingModel(
     val name: String,
     val accountNumber: String,
     val country: String,
@@ -22,15 +27,16 @@ data class LocalBankingDetails(
     val beneficiaryAddress: String
 )
 
-data class ForeignBankingDetails(
+data class ForeignBankingModel(
     val name: String,
     val accountNumber: String,
     val contractorName: String,
     val address: String
 )
 
-data class EmployeeDetails(
+data class EmployeeDetailsModel(
     val name: String,
+    val signPath: String,
     val invoiceDate: Date,
     val contractDate: Date,
     val serviceProvider: String,
@@ -44,7 +50,7 @@ data class EmployeeDetails(
     fun formattedInvoiceDate(locale: Locale)= SimpleDateFormat("dd MMMMM yyyy", locale).format(invoiceDate)
     fun formattedPaymentDeadline(locale: Locale) = LocalDate.now().plusDays(15).format(DateTimeFormatter.ofPattern("dd MMMM yyyy", locale))
 
-    fun invoiceNumber() = LocalDate.now().run { "$year-${month.value}-SB" }
-    fun dateOfService() = SimpleDateFormat("MMMMM yyyy").format(Date())
+    fun getInvoiceNumber() = LocalDate.now().run { "$year-${month.value}-SB" }
+    fun getDateOfService(locale: Locale) = SimpleDateFormat("MMMMM yyyy", locale).format(Date())
 
 }

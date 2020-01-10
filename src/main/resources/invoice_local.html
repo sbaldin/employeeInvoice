@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta name="generator" content="LibreOffice 6.0.7.3 (Linux)"/>
+    <meta name="created" content="2016-11-23T16:33:32"/>
+    <meta name="changed" content="2019-12-07T18:28:12"/>
+    <meta name="AppVersion" content="16.0300"/>
+
+    <style type="text/css">
+        body, div, table, thead, tbody, tfoot, tr, th, td, p {
+            font-family: "Arial",serif;
+            font-size: medium;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        body {
+            padding: 0 30px;
+            height: 870px;
+        }
+
+        a.comment-indicator:hover + comment {
+            background: #ffd;
+            position: absolute;
+            display: block;
+            border: 1px solid black;
+            padding: 0.5em;
+        }
+
+        comment {
+            display: none;
+        }
+
+        table, table td {
+            border: solid 1px;
+            padding: 5px;
+            margin: 0;
+            border-spacing: 0;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table {
+            margin-bottom: 20px;
+        }
+
+        div {
+            width: 750px;
+        }
+
+        table td:nth-child(1) {
+            width: 375px;
+        }
+
+        table td:nth-child(2) {
+            width: 375px;
+        }
+
+        .table-container {
+            width: auto;
+            margin-top: 50px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .main-text-block{
+            text-align: center;
+            height: 100px;
+        }
+
+        .sign-line {
+            border-bottom: solid black 1px;
+            width: 140px;
+            height: 18px;
+            display: inline-block;
+        }
+
+        .signature {
+            float: right;
+            position: relative;
+            padding: 20px 40px;
+        }
+
+        .signature img {
+            position: absolute;
+            display: block;
+            left: 120px;
+            top: -15px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h1>Инвойс № ${employee.invoiceNumber} от ${employee.invoiceDate?date}</h1>
+
+<table class="root">
+    <tr>
+        <th>Описание услуг стоимость</th>
+        <th>стоимость</th>
+    </tr>
+    <tr>
+        <td class="main-text-block">
+            Разработка и поддержка программного обеспечения по договору
+            об оказании услуг от ${formattedContractDate} за ${formattedInvoiceDate}.
+        </td>
+        <td class="main-text-block">
+            $ ${employee.monthRate}
+        </td>
+    </tr>
+
+</table>
+
+<p>Оплатить в срок до ${formattedPaymentDeadline}.</p>
+<div class="table-container">
+    <p>Выставлен:</p>
+
+    <table class="root">
+
+        <tr>
+            <td>Наименование Банка</td>
+            <td>${foreignBankingDetails.name}</td>
+        </tr>
+        <tr>
+            <td>Номер Счета</td>
+            <td>${foreignBankingDetails.accountNumber}</td>
+        </tr>
+        <tr>
+            <td>Имя Отправителя</td>
+            <td>${foreignBankingDetails.contractorName}</td>
+        </tr>
+        <tr>
+            <td>Адрес</td>
+            <td>${foreignBankingDetails.address}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="table-container">
+    <p>Получатель:</p>
+
+    <table class="root">
+
+        <tr>
+            <td>Наименование Банка</td>
+            <td>${localBankingDetails.name}</td>
+        </tr>
+        <tr>
+            <td>Номер Счета</td>
+            <td>${localBankingDetails.accountNumber}</td>
+        </tr>
+        <tr>
+            <td>Имя Получателя</td>
+            <td>${localBankingDetails.beneficiaryName}</td>
+        </tr>
+        <tr>
+            <td>Адрес</td>
+            <td>${localBankingDetails.address}</td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <p class="bold signature">Подпись <span class="sign-line"> </span> <img src="${employee.signPath}" alt=""></p>
+</div>
+
+</body>
+</html>

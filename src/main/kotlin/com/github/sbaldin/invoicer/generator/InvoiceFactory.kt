@@ -1,42 +1,78 @@
 package com.github.sbaldin.invoicer.generator
 
 import com.github.sbaldin.invoicer.domain.*
-import com.github.sbaldin.invoicer.domain.RunTypeEnum.*
-import com.github.sbaldin.invoicer.generator.invoice.ForeignBankInvoice
-import com.github.sbaldin.invoicer.generator.invoice.Invoice
-import com.github.sbaldin.invoicer.generator.invoice.LocalBankInvoice
-import org.apache.poi.POIXMLDocument
+import com.github.sbaldin.invoicer.domain.AppRunTypeEnum.*
+import com.github.sbaldin.invoicer.generator.invoice.poi.ForeignBankInvoice
+import com.github.sbaldin.invoicer.generator.invoice.PoiInvoice
+import com.github.sbaldin.invoicer.generator.invoice.poi.LocalBankInvoice
+import com.github.sbaldin.invoicer.generator.invoice.PdfInvoice
+import com.github.sbaldin.invoicer.generator.invoice.pdf.ForeignBankInvoice as PDFForeignBankInvoice
+import com.github.sbaldin.invoicer.generator.invoice.pdf.LocalBankInvoice as PDFLocalBankInvoice
 
 
 class InvoiceFactory(
-    val appConf: AppConf,
-    val employee: EmployeeDetails,
-    private val localBankingDetails: LocalBankingDetails,
-    private val foreignBankingDetails: ForeignBankingDetails
-){
+    private val appConf: AppConf,
+    private val employeeDetails: EmployeeDetailsModel,
+    private val localBankingModel: LocalBankingModel,
+    private val foreignBankingModel: ForeignBankingModel
+) {
 
-    fun getInvoiceList(runType: RunTypeEnum): List<Invoice> = when(runType){
-        ForeignInvoice -> listOf(
+    fun getOfficeInvoiceList(runType: AppRunTypeEnum): List<PoiInvoice> = when (runType) {
+        FOREIGN_BANK_INVOICE -> listOf(
             ForeignBankInvoice(
-                employee,
-                localBankingDetails,
-                appConf.foreignTemplatePath
-            ).generate())
-        LocalInvoice  -> listOf(
+                employeeDetails,
+                localBankingModel
+            ).generate()
+        )
+        LOCAL_BANK_INVOICE -> listOf(
             LocalBankInvoice(
-                employee,
-                localBankingDetails,
-                foreignBankingDetails
-            ).generate())
-        Both     -> listOf(
+                employeeDetails,
+                localBankingModel,
+                foreignBankingModel
+            ).generate()
+        )
+        BOTH -> listOf(
             ForeignBankInvoice(
-                employee,
-                localBankingDetails,
-                appConf.foreignTemplatePath
+                employeeDetails,
+                localBankingModel
             ).generate(), LocalBankInvoice(
-                employee,
-                localBankingDetails,
-                foreignBankingDetails
-            ).generate())
+                employeeDetails,
+                localBankingModel,
+                foreignBankingModel
+            ).generate()
+        )
+    }
+
+    fun getPdfInvoiceList(runType: AppRunTypeEnum): List<PdfInvoice> = when (runType) {
+        FOREIGN_BANK_INVOICE -> listOf(
+            PDFForeignBankInvoice(
+                employeeDetails,
+                localBankingModel,
+                foreignBankingModel,
+                "/invoice_foreign.html"
+            ).generate()
+        )
+        LOCAL_BANK_INVOICE -> listOf(
+            PDFLocalBankInvoice(
+                employeeDetails,
+                localBankingModel,
+                foreignBankingModel,
+                "/invoice_local.html"
+            ).generate()
+        )
+        BOTH -> listOf(
+            PDFForeignBankInvoice(
+                employeeDetails,
+                localBankingModel,
+                foreignBankingModel,
+                "/invoice_foreign.html"
+            ).generate(),
+            PDFLocalBankInvoice(
+                employeeDetails,
+                localBankingModel,
+                foreignBankingModel,
+                "/invoice_local.html"
+            ).generate()
+        )
     }
 }
