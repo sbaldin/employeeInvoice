@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta name="generator" content="LibreOffice 6.0.7.3 (Linux)"/>
+    <meta name="created" content="2016-11-23T16:33:32"/>
+    <meta name="changed" content="2019-12-07T18:28:12"/>
+    <meta name="AppVersion" content="16.0300"/>
+
+    <style type="text/css">
+        body, div, table, thead, tbody, tfoot, tr, th, td, p {
+            font-family: "Arial",serif;
+            font-size: medium;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        body{
+            padding: 0 30px;
+            height: 840px;
+        }
+
+        a.comment-indicator:hover + comment {
+            background: #ffd;
+            position: absolute;
+            display: block;
+            border: 1px solid black;
+            padding: 0.5em;
+        }
+
+        comment {
+            display: none;
+        }
+
+        table, table td {
+            border: solid 1px;
+            padding: 5px;
+            margin: 0;
+            border-spacing: 0;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table {
+            margin-bottom: 20px;
+        }
+
+        td.address-cell-title, td.address-cell-value {
+            height: 100px;
+        }
+
+        td.address-cell-value {
+            text-align: center;
+        }
+
+        div {
+            width: 750px;
+        }
+
+        table td:nth-child(1) {
+            width: 375px;
+        }
+
+        table td:nth-child(2) {
+            width: 375px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .sign-line {
+            border-bottom: solid black 1px;
+            width: 140px;
+            height: 18px;
+            display: inline-block;
+        }
+
+        .signature {
+            float: right;
+            position: relative;
+            padding: 20px 40px;
+        }
+
+        .signature img {
+            position: absolute;
+            display: block;
+            left: 120px;
+            top: -15px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h1>${employee.name} Invoice</h1>
+
+<p>Contract dated as of ${employee.contractDate?date}.</p>
+
+<table class="root">
+
+    <tr>
+        <td>Invoice date:</td>
+        <td>${employee.invoiceDate?date}</td>
+    </tr>
+    <tr>
+        <td>Invoice number:</td>
+        <td>${employee.invoiceNumber}</td>
+    </tr>
+
+</table>
+
+<p class="bold">Date of service: ${dateOfService}</p>
+
+<table>
+
+    <tr>
+        <td>Service Provided:</td>
+        <td>Platform Development</td>
+    </tr>
+</table>
+
+<table class="root">
+
+    <tr>
+        <td>Total number of vacation days taken in this calendar year:</td>
+        <td>${employee.vacationDaysInYear}</td>
+    </tr>
+    <tr>
+        <td>Number of vacation days taken in the invoiced month:</td>
+        <td>${employee.vacationDaysInMonth}</td>
+    </tr>
+</table>
+
+<table class="root">
+
+    <tr>
+        <td>Full Month Rate:</td>
+        <td>$ ${employee.monthRate}</td>
+    </tr>
+    <tr>
+        <td>Additional Expenses:</td>
+        <td>$ ${employee.additionalExpenses}</td>
+    </tr>
+</table>
+
+<table class="root">
+
+    <tr>
+        <td class="bold">Invoiced amount:</td>
+        <td class="bold">$ ${employee.monthRate}</td>
+    </tr>
+    <tr>
+        <td>Comment:</td>
+        <td></td>
+    </tr>
+</table>
+<h2>Payment Instructions:</h2>
+<table class="root">
+
+
+    <tr>
+        <td>Bank Name:</td>
+        <td>${localBankingDetails.name}</td>
+    </tr>
+    <tr>
+        <td>Account Number:</td>
+        <td>${localBankingDetails.accountNumber}</td>
+    </tr>
+    <tr>
+        <td>Bank Country:</td>
+        <td>${localBankingDetails.country}</td>
+    </tr>
+    <tr>
+        <td class="address-cell-title">Bank Address and contact tel #</td>
+        <td class="address-cell-value">${localBankingDetails.address}</td>
+    </tr>
+
+    <tr>
+        <td>Beneficiary Name
+        </td>
+        <td>${localBankingDetails.beneficiaryName}</td>
+    </tr>
+
+    <tr>
+        <td class="address-cell-title">Your Address that you linked to that bank account
+        </td>
+        <td class="address-cell-value">${localBankingDetails.beneficiaryAddress}</td>
+    </tr>
+</table>
+
+<div>
+    <p class="bold signature">Signature <span class="sign-line"> </span> <img src="${employee.signPath}" alt=""></p>
+</div>
+
+</body>
+</html>
