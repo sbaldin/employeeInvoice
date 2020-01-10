@@ -1,8 +1,8 @@
 app:
-  runType: Both
+  appRunType: BOTH
+  resultFileType: PDF #OFFICE #PDF
   sendToEmail: myEmail@gmail.com
-  foreignTemplatePath: build/resources/main/invoice_english.xlsx
-  outputPath: /home/sbaldin
+  outputPath: / #relative path from user home directory
 employee:
   name: Ivan Ivanov
   invoiceDate: 2000-01-01
@@ -12,6 +12,7 @@ employee:
   vacationDaysInYear: 2
   monthRate: 1000
   additionalExpenses: 100
+  signPath:  build/resources/main/sign.png
 banking:
   local:
     name: AO «BANK»

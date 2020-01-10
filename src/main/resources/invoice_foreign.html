@@ -11,12 +11,17 @@
 
     <style type="text/css">
         body, div, table, thead, tbody, tfoot, tr, th, td, p {
-            font-family: "Arial";
+            font-family: "Arial",serif;
             font-size: medium;
         }
 
         h2 {
             font-size: 18px;
+        }
+
+        body{
+            padding: 0 30px;
+            height: 840px;
         }
 
         a.comment-indicator:hover + comment {
@@ -25,14 +30,6 @@
             display: block;
             border: 1px solid black;
             padding: 0.5em;
-        }
-
-        a.comment-indicator {
-            background: red;
-            display: inline-block;
-            border: 1px solid black;
-            width: 0.5em;
-            height: 0.5em;
         }
 
         comment {
@@ -45,22 +42,31 @@
             margin: 0;
             border-spacing: 0;
             border-collapse: collapse;
+            font-size: 14px;
         }
 
         table {
             margin-bottom: 20px;
         }
 
-        div{
+        td.address-cell-title, td.address-cell-value {
+            height: 100px;
+        }
+
+        td.address-cell-value {
+            text-align: center;
+        }
+
+        div {
             width: 750px;
         }
 
         table td:nth-child(1) {
-            width: 450px;
+            width: 375px;
         }
 
         table td:nth-child(2) {
-            width: 300px;
+            width: 375px;
         }
 
         .bold {
@@ -69,18 +75,18 @@
 
         .sign-line {
             border-bottom: solid black 1px;
-            width: 200px;
+            width: 140px;
             height: 18px;
             display: inline-block;
         }
 
         .signature {
-             float: right;
-             position: relative;
-             padding: 20px 0;
-         }
+            float: right;
+            position: relative;
+            padding: 20px 40px;
+        }
 
-        .signature  img {
+        .signature img {
             position: absolute;
             display: block;
             left: 120px;
@@ -92,16 +98,15 @@
 
 <body>
 
+<h1>${employee.name} Invoice</h1>
 
-<h1>Baldin Sergey Invoice</h1>
-
-<p>Contract dated as of ${employee.contractDate}.</p>
+<p>Contract dated as of ${employee.contractDate?date}.</p>
 
 <table class="root">
 
     <tr>
         <td>Invoice date:</td>
-        <td>${employee.invoiceDate}</td>
+        <td>${employee.invoiceDate?date}</td>
     </tr>
     <tr>
         <td>Invoice number:</td>
@@ -110,7 +115,7 @@
 
 </table>
 
-<p class="bold">Date of service: October 2018</p>
+<p class="bold">Date of service: ${dateOfService}</p>
 
 <table>
 
@@ -148,7 +153,7 @@
 
     <tr>
         <td class="bold">Invoiced amount:</td>
-        <td class="bold">$ ${employee.amount}</td>
+        <td class="bold">$ ${employee.monthRate}</td>
     </tr>
     <tr>
         <td>Comment:</td>
@@ -161,37 +166,37 @@
 
     <tr>
         <td>Bank Name:</td>
-        <td>${banking.local.name}</td>
+        <td>${localBankingDetails.name}</td>
     </tr>
     <tr>
         <td>Account Number:</td>
-        <td>${banking.local.accountNumber}</td>
+        <td>${localBankingDetails.accountNumber}</td>
     </tr>
     <tr>
         <td>Bank Country:</td>
-        <td>${banking.local.country}</td>
+        <td>${localBankingDetails.country}</td>
     </tr>
     <tr>
-        <td>Bank Address and contact tel #</td>
-        <td>${banking.local.country}</td>
+        <td class="address-cell-title">Bank Address and contact tel #</td>
+        <td class="address-cell-value">${localBankingDetails.address}</td>
     </tr>
 
     <tr>
         <td>Beneficiary Name
         </td>
-        <td>${banking.local.country}</td>
+        <td>${localBankingDetails.beneficiaryName}</td>
     </tr>
 
     <tr>
-        <td>Your Address that you linked to that bank account
+        <td class="address-cell-title">Your Address that you linked to that bank account
         </td>
-        <td>${banking.local.country}</td>
+        <td class="address-cell-value">${localBankingDetails.beneficiaryAddress}</td>
     </tr>
 </table>
-</body>
 
 <div>
-    <p class="bold signature">Signature <span class="sign-line"> </span> <img src="sign.png" alt=""></p>
+    <p class="bold signature">Signature <span class="sign-line"> </span> <img src="${employee.signPath}" alt=""></p>
 </div>
 
+</body>
 </html>

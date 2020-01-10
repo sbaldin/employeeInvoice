@@ -1,8 +1,10 @@
 package com.github.sbaldin.invoicer.generator.invoice.poi
 
-import com.github.sbaldin.invoicer.domain.EmployeeDetails
-import com.github.sbaldin.invoicer.domain.ForeignBankingDetails
-import com.github.sbaldin.invoicer.domain.LocalBankingDetails
+import com.github.sbaldin.invoicer.domain.EmployeeDetailsModel
+import com.github.sbaldin.invoicer.domain.ForeignBankingModel
+import com.github.sbaldin.invoicer.domain.LocalBankingModel
+import com.github.sbaldin.invoicer.generator.invoice.InvoiceGenerator
+import com.github.sbaldin.invoicer.generator.invoice.PoiInvoice
 import org.apache.poi.xwpf.usermodel.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STLineSpacingRule
@@ -11,15 +13,15 @@ import java.util.*
 
 
 class LocalBankInvoice(
-    private val employee: EmployeeDetails,
-    private val localBankingDetails: LocalBankingDetails,
-    private val foreignBankingDetails: ForeignBankingDetails
+    private val employeeDetails: EmployeeDetailsModel,
+    private val localBankingModel: LocalBankingModel,
+    private val foreignBankingModel: ForeignBankingModel
 ) : InvoiceGenerator {
 
-    override fun generate(): Invoice {
+    override fun generate(): PoiInvoice {
         val document = XWPFDocument()
         document.apply {
-            singleLineParagraph("Инвойс № ${employee.invoiceNumber()} от ${employee.formattedInvoiceDate(Locale("ru"))}") {
+            singleLineParagraph("Инвойс № ${employeeDetails.getInvoiceNumber()} от ${employeeDetails.formattedInvoiceDate(Locale("ru"))}") {
                 it.style = "Heading1"
                 it.alignment = ParagraphAlignment.CENTER
                 setSingleLineSpacing(it)
@@ -30,7 +32,7 @@ class LocalBankInvoice(
             }
             createMonthRateTable()
 
-            singleLineParagraph("Оплатить в срок до ${employee.formattedPaymentDeadline(Locale("ru"))}.")
+            singleLineParagraph("Оплатить в срок до ${employeeDetails.formattedPaymentDeadline(Locale("ru"))}.")
 
             createForeignBankDetailsTable()
             createLocalBankDetails()
@@ -44,8 +46,8 @@ class LocalBankInvoice(
                 setDoublerLineSpacing(it)
             }
         }
-        return Invoice(
-            name = "${employee.name}_invoice.docx",
+        return PoiInvoice(
+            name = "${employeeDetails.name}_invoice.docx",
             document = document
         )
     }
@@ -62,11 +64,11 @@ class LocalBankInvoice(
             val tableRowTwo: XWPFTableRow = rows[1]
             //TODO fix format here
             val jobDesc = "Разработка и поддержка программного обеспечения по договору " +
-                    "об оказании услуг от ${employee.formattedContractDate()}" +
-                    " за ${employee.formattedInvoiceDate(Locale("ru"))}."
+                    "об оказании услуг от ${employeeDetails.formattedContractDate()}" +
+                    " за ${employeeDetails.formattedInvoiceDate(Locale("ru"))}."
 
             setTextWithDefaultStyle(tableRowTwo.getCell(0), jobDesc)
-            setTextWithDefaultStyle(tableRowTwo.getCell(1), "$ ${employee.monthRate}")
+            setTextWithDefaultStyle(tableRowTwo.getCell(1), "$ ${employeeDetails.monthRate}")
         }
         createParagraph().body.insertTable(0, monthRateTable)
     }
@@ -83,19 +85,19 @@ class LocalBankInvoice(
             val bankName: XWPFTableRow = getRow(0)
 
             setTextWithDefaultStyle(bankName.getCell(0), "Наименование Банка")
-            setTextWithDefaultStyle(bankName.getCell(1), foreignBankingDetails.name)
+            setTextWithDefaultStyle(bankName.getCell(1), foreignBankingModel.name)
 
             val accountNumber: XWPFTableRow = getRow(1)
             setTextWithDefaultStyle(accountNumber.getCell(0), "Номер Счета")
-            setTextWithDefaultStyle(accountNumber.getCell(1), foreignBankingDetails.accountNumber)
+            setTextWithDefaultStyle(accountNumber.getCell(1), foreignBankingModel.accountNumber)
 
             val employeeName: XWPFTableRow = getRow(2)
             setTextWithDefaultStyle(employeeName.getCell(0), "Имя Отправителя")
-            setTextWithDefaultStyle(employeeName.getCell(1), foreignBankingDetails.contractorName)
+            setTextWithDefaultStyle(employeeName.getCell(1), foreignBankingModel.contractorName)
 
             val address: XWPFTableRow = getRow(3)
             setTextWithDefaultStyle(address.getCell(0), "Адрес")
-            setTextWithDefaultStyle(address.getCell(1), foreignBankingDetails.address)
+            setTextWithDefaultStyle(address.getCell(1), foreignBankingModel.address)
         }
         createParagraph().body.insertTable(0, foreignBankDetailsTable)
     }
@@ -112,19 +114,19 @@ class LocalBankInvoice(
             //create first row
             val bankName: XWPFTableRow = getRow(0)
             setTextWithDefaultStyle(bankName.getCell(0), "Наименование Банка")
-            setTextWithDefaultStyle(bankName.getCell(1), localBankingDetails.name)
+            setTextWithDefaultStyle(bankName.getCell(1), localBankingModel.name)
 
             val accountNumber: XWPFTableRow = getRow(1)
             setTextWithDefaultStyle(accountNumber.getCell(0), "Номер Счета")
-            setTextWithDefaultStyle(accountNumber.getCell(1), localBankingDetails.accountNumber)
+            setTextWithDefaultStyle(accountNumber.getCell(1), localBankingModel.accountNumber)
 
             val employeeName: XWPFTableRow = getRow(2)
             setTextWithDefaultStyle(employeeName.getCell(0), "Имя Получателя")
-            setTextWithDefaultStyle(employeeName.getCell(1), localBankingDetails.beneficiaryName)
+            setTextWithDefaultStyle(employeeName.getCell(1), localBankingModel.beneficiaryName)
 
             val address: XWPFTableRow = getRow(3)
             setTextWithDefaultStyle(address.getCell(0), "Адрес")
-            setTextWithDefaultStyle(address.getCell(1), localBankingDetails.beneficiaryAddress)
+            setTextWithDefaultStyle(address.getCell(1), localBankingModel.beneficiaryAddress)
         }
 
         createParagraph().body.insertTable(0, localBankDetailsTable)
