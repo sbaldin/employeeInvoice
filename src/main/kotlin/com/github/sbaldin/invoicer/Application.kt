@@ -36,7 +36,12 @@ private fun readForeignBankingDetails(appConfPath: String, resourcePath: String 
 
 fun main(args: Array<String>) {
     log.info("Args:" + args.joinToString())
-    val appConfPath = args[0]
+    val appConfPath = if(args.isEmpty()) {
+        log.warn("Args doesn't contain the path to Application.yaml, the default path will be used instead.")
+        "./application-invoicer.yaml"
+    } else {
+        args[0]
+    }
     log.info("Application config path:$appConfPath")
 
     val appConf = readAppConf(appConfPath)
