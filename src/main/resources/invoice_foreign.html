@@ -195,7 +195,7 @@
 </table>
 
 <div>
-    <p class="bold signature">Signature <span class="sign-line"> </span> <img src="${employee.signPath}" alt=""></p>
+    <p class="bold signature">Signature <span class="sign-line"> </span> <#if employee.signPath??><img src="${employee.signPath}" alt=""><#else></#if> </p>
 </div>
 
 </body>
