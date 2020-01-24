@@ -52,7 +52,8 @@ fun main(args: Array<String>) {
         readForeignBankingDetails(appConfPath)
     )
     val outputPath = System.getProperty("user.home") + appConf.outputPath
-    log.info(appConf.resultFileType.title)
+    log.info("Invoice generation started. \n ${appConf.resultFileType.title}")
+
     when (appConf.resultFileType) {
         ResultFileTypeEnum.OFFICE -> {
             val invoices = invoiceFactory.getOfficeInvoiceList(appConf.appRunType)
@@ -64,5 +65,5 @@ fun main(args: Array<String>) {
         }
     }
 
-    log.info("Invoices generation finished.")
+    log.info("Invoice generation completed.")
 }

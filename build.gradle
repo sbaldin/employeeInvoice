@@ -95,12 +95,24 @@ jar {
 }
 
 application {
-    applicationDefaultJvmArgs = ['-Xmx700m']
+    applicationDefaultJvmArgs = ['-Xmx500m']
 
 }
 
+run {
+    if (project.hasProperty('jargs') && jargs.split(',').length > 0) {
+        args(jargs.split(','))
+    } else {
+        args = ["./build/resources/main/application.yaml"]
+    }
+}
+
 runShadow {
-    args = ["./build/resources/main/application.yaml"]
+    if (project.hasProperty('jargs') && jargs.split(',').length > 0) {
+        args(jargs.split(','))
+    } else {
+        args = ["./build/resources/main/application.yaml"]
+    }
 }
 
 task copyBinaries(type: Copy) {

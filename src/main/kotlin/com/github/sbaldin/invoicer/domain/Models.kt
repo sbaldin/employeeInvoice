@@ -14,7 +14,7 @@ enum class AppRunTypeEnum {
 
 
 enum class ResultFileTypeEnum(val title: String) {
-    PDF("Application will produce full-filled pdf files with signatures"),
+    PDF("Application will produce full-filled pdf files with signatures."),
     OFFICE("Application will produce editable docx and xlsx files without signature.")
 }
 

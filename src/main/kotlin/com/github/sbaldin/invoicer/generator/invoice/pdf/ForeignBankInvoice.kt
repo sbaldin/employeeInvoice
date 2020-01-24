@@ -31,7 +31,9 @@ class ForeignBankInvoice(
         root["dateOfService"] = employeeDetails.getDateOfService(Locale.ENGLISH)
         root["localBankingDetails"] = localBankingModel
         root["foreignBankingDetails"] = foreignBankingModel
-        root["signPath"] = "./" + employeeDetails.signPath
+        if(employeeDetails.signPath.isNotBlank()){
+            root["signPath"] = "./" + employeeDetails.signPath
+        }
         return root
     }
 }

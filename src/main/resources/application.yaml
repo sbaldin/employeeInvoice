@@ -1,7 +1,6 @@
 app:
-  appRunType: BOTH
+  appRunType: BOTH #FOREIGN_BANK_INVOICE #LOCAL_BANK_INVOICE,
   resultFileType: PDF #OFFICE #PDF
-  sendToEmail: myEmail@gmail.com
   outputPath: / #relative path from user home directory
 employee:
   name: Ivan Ivanov
@@ -12,7 +11,7 @@ employee:
   vacationDaysInYear: 2
   monthRate: 1000
   additionalExpenses: 100
-  signPath:  build/resources/main/sign.png
+  signPath: # build/resources/main/sign.png # path to your signature, leave empty to skip signature adding
 banking:
   local:
     name: AO «BANK»
