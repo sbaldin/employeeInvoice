@@ -30,7 +30,7 @@ The`app` section allow you to specify what kind of invoice you want to generate(
 
 The `employee` section allows you to specify 'for whom' invoices will be generated.
 
-The `banking` section allow you specify bank details for both type of invoices.
+The `banking` section allows you to specify bank details for both types of invoices.
 ```
 app:
   appRunType: BOTH #FOREIGN_BANK_INVOICE #LOCAL_BANK_INVOICE #BOTH
