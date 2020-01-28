@@ -100,13 +100,13 @@
 
 <h1>${employee.name} Invoice</h1>
 
-<p>Contract dated as of ${employee.contractDate?date}.</p>
+<p>Contract dated as of ${formattedContractDate}.</p>
 
 <table class="root">
 
     <tr>
         <td>Invoice date:</td>
-        <td>${employee.invoiceDate?date}</td>
+        <td>${formattedInvoiceDate}</td>
     </tr>
     <tr>
         <td>Invoice number:</td>

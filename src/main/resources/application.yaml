@@ -4,14 +4,13 @@ app:
   outputPath: / #relative path from user home directory
 employee:
   name: Ivan Ivanov
-  invoiceDate: 2000-01-01
   contractDate: 1970-01-01
   serviceProvider: Platform Development
   vacationDaysInMonth: 1
   vacationDaysInYear: 2
   monthRate: 1000
   additionalExpenses: 100
-  signPath: # build/resources/main/sign.png # path to your signature, leave empty to skip signature adding
+  signPath: build/resources/main/sign.png # path to your signature, leave empty to leave signature field empty
 banking:
   local:
     name: AO «BANK»
