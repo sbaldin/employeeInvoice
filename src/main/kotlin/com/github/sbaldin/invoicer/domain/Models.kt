@@ -46,24 +46,29 @@ data class EmployeeDetailsModel(
     val additionalExpenses: Int
 ) {
 
+    init {
+
+    }
+
     fun formattedContractDate() = SimpleDateFormat("dd.MM.yyyy").format(contractDate)
-    fun formattedInvoiceDate(locale: Locale):String{
-        return if(locale == Locale.ENGLISH){
-            SimpleDateFormat("dd MMMMM yyyy", locale).format(Date())
-        }else {
-            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale("ru")).format(LocalDate.now())
+    fun formattedInvoiceDate(locale: Locale): String {
+        return if (locale == Locale.ENGLISH) {
+            DateTimeFormatter.ofPattern("dd MMMMM yyyy").withLocale(locale).format(getNowLocalDate())
+        } else {
+            DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale("ru")).format(getNowLocalDate())
         }
     }
-    fun formattedPaymentDeadline(locale: Locale) :String{
-        val deadLine =  LocalDate.now().plusDays(15)
-        return if(locale == Locale.ENGLISH){
+
+    fun formattedPaymentDeadline(locale: Locale): String {
+        val deadLine = getNowLocalDate().plusDays(15)
+        return if (locale == Locale.ENGLISH) {
             deadLine.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", locale))
-        }else {
+        } else {
             DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale("ru")).format(deadLine)
         }
     }
 
-    fun getInvoiceNumber() = LocalDate.now().run { "$year-${month.value}-SB" }
-    fun getDateOfService(locale: Locale) = SimpleDateFormat("MMMMM yyyy", locale).format(Date())
+    fun getInvoiceNumber() = getNowLocalDate().run { "$year-${month.value}-SB" }
+    fun getDateOfService(locale: Locale) = SimpleDateFormat("LLLL yyyy", locale).format(getNow()).capitalize()
 
 }
