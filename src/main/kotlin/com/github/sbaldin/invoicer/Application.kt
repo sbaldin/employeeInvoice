@@ -8,8 +8,15 @@ import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.source.yaml
 import com.uchuhimo.konf.toValue
 import javafx.application.Application
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.produce
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.random.Random
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
@@ -43,6 +50,10 @@ fun main(args: Array<String>) {
         args[0]
     }
     log.info("Application config path:$appConfPath")
+    if(args.size > 1 ){
+       setNow(SimpleDateFormat("dd.mm.yy").parse(args[1]))
+        log.info("Following date will be used instead of `now` ${getNow()}")
+    }
 
     val appConf = readAppConf(appConfPath)
     val invoiceFactory = InvoiceFactory(

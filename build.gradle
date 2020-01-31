@@ -1,3 +1,5 @@
+import java.time.LocalDate
+
 buildscript {
 
     ext {
@@ -40,6 +42,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
     testCompile "org.jetbrains.kotlin:kotlin-test"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit"
 
@@ -111,7 +114,8 @@ runShadow {
     if (project.hasProperty('jargs') && jargs.split(',').length > 0) {
         args(jargs.split(','))
     } else {
-        args = ["./build/resources/main/application.yaml"]
+        def invoiceDate = LocalDate.now()
+        args = ["./build/resources/main/application.yaml", "25.${invoiceDate.monthValue}.${invoiceDate.year}"]
     }
 }
 
