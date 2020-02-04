@@ -154,6 +154,6 @@ task copyAppYaml(type: Copy, dependsOn: build) {
 }
 
 
-task installToUserDirectory {
+task installToUserHomeDir {
     dependsOn(copyJar, copyAppYaml, copyBinaries, copyScripts, chmodBinaries)
 }

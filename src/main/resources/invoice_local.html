@@ -10,18 +10,19 @@
     <meta name="AppVersion" content="16.0300"/>
 
     <style type="text/css">
-        body, div, table, thead, tbody, tfoot, tr, th, td, p {
-            font-family: "Arial",serif;
-            font-size: medium;
-        }
 
-        h2 {
-            font-size: 18px;
+        h1 {
+            font-size: 24pt;
+            text-align: center;
         }
 
         body {
-            padding: 0 30px;
-            height: 870px;
+            padding: 20mm;
+            position:relative;
+            width:calc(210mm * 1.25);
+            height:calc(297mm * 1.25);
+            font-family: "Arial",serif;
+            font-size: 14pt;
         }
 
         a.comment-indicator:hover + comment {
@@ -30,6 +31,7 @@
             display: block;
             border: 1px solid black;
             padding: 0.5em;
+
         }
 
         comment {
@@ -38,27 +40,23 @@
 
         table, table td {
             border: solid 1px;
-            padding: 5px;
+            padding: 10px 15px;
             margin: 0;
             border-spacing: 0;
             border-collapse: collapse;
-            font-size: 14px;
         }
 
         table {
             margin-bottom: 20px;
-        }
-
-        div {
-            width: 750px;
+            width: 100%;
         }
 
         table td:nth-child(1) {
-            width: 375px;
+            width: 50%;
         }
 
         table td:nth-child(2) {
-            width: 375px;
+            width: 50%;
         }
 
         .table-container {
@@ -75,7 +73,7 @@
             height: 100px;
         }
 
-        .sign-line {
+        .signature-line {
             border-bottom: solid black 1px;
             width: 140px;
             height: 18px;
@@ -91,7 +89,7 @@
         .signature img {
             position: absolute;
             display: block;
-            left: 120px;
+            left: 50%;
             top: -15px;
         }
     </style>
@@ -100,7 +98,7 @@
 
 <body>
 
-<h1>Инвойс № ${employee.invoiceNumber} от ${employee.invoiceDate?date}</h1>
+<h1>Инвойс № ${employee.invoiceNumber} от ${formattedInvoiceDate}</h1>
 
 <table class="root">
     <tr>
@@ -110,7 +108,7 @@
     <tr>
         <td class="main-text-block">
             Разработка и поддержка программного обеспечения по договору
-            об оказании услуг от ${formattedContractDate} за ${formattedInvoiceDate}.
+            об оказании услуг от ${formattedContractDate} за ${dateOfService}.
         </td>
         <td class="main-text-block">
             $ ${employee.monthRate}
@@ -169,7 +167,7 @@
 </div>
 
 <div>
-    <p class="bold signature">Подпись <span class="sign-line"> </span> <img src="${employee.signPath}" alt=""></p>
+    <p class="bold signature">Подпись <span class="signature-line"> </span> <img src="${employee.signPath}" alt=""></p>
 </div>
 
 </body>
