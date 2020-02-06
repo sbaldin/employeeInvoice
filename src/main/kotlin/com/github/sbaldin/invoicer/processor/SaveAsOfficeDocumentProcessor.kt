@@ -10,7 +10,7 @@ class SaveAsOfficeDocumentProcessor(outputPath: String) : ResultFileProcessor<Po
 
     override fun process(invoices: List<PoiInvoice>){
         invoices.forEach {
-            log.info("Saving to file ${it.name}")
+            log.info("Saving to file ${outputPath}/${it.name}")
             it.document.write(File("${outputPath}/${it.name}").outputStream())
         }
     }
