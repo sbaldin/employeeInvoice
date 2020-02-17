@@ -99,24 +99,10 @@ jar {
 
 application {
     applicationDefaultJvmArgs = ['-Xmx500m']
-
 }
 
-run {
-    if (project.hasProperty('jargs') && jargs.split(',').length > 0) {
-        args(jargs.split(','))
-    } else {
-        args = ["./build/resources/main/application.yaml"]
-    }
-}
-
-runShadow {
-    if (project.hasProperty('jargs') && jargs.split(',').length > 0) {
-        args(jargs.split(','))
-    } else {
-        def invoiceDate = LocalDate.now()
-        args = ["./build/resources/main/application.yaml", "25.${invoiceDate.monthValue}.${invoiceDate.year}"]
-    }
+tasks.withType(JavaExec) {
+    systemProperties System.properties
 }
 
 task copyBinaries(type: Copy) {
@@ -151,10 +137,8 @@ task copyJar(type: Copy, dependsOn: build) {
 
 task copyAppYaml(type: Copy, dependsOn: build) {
     from 'build/resources/main'
-    include "application.yaml"
-    rename("application.yaml", "application-invoicer.yaml")
+    include "*.yaml"
     into destinationPath
-
 }
 
 
