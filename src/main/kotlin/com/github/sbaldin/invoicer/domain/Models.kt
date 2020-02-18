@@ -61,14 +61,10 @@ data class EmployeeDetailsModel(
     val additionalExpenses: Int
 ) {
 
-    init {
-
-    }
-
-    fun formattedContractDate() = SimpleDateFormat("dd.MM.yyyy").format(contractDate)
+    fun formattedContractDate(pattern: String = "dd.MM.yyyy") = SimpleDateFormat(pattern).format(contractDate)
     fun formattedInvoiceDate(locale: Locale): String {
         return if (locale == Locale.ENGLISH) {
-            DateTimeFormatter.ofPattern("dd MMMMM yyyy").withLocale(locale).format(getNowLocalDate())
+            DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(locale).format(getNowLocalDate())
         } else {
             DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale("ru")).format(getNowLocalDate())
         }

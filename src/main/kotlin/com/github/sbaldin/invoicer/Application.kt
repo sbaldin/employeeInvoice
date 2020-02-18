@@ -32,7 +32,7 @@ class Application {
     private fun readLocalizedLocalBankingDetails(employeeConfPath: String, resourcePath: String = "employee.yaml") =
         LocalizedLocalBankingModel(
             mapOf(
-                Locale.ENGLISH to readLocalBankingDetails(employeeConfPath, Locale("en"), resourcePath),
+                Locale.ENGLISH to readLocalBankingDetails(employeeConfPath, Locale.ENGLISH, resourcePath),
                 Locale("ru") to readLocalBankingDetails(employeeConfPath, Locale("ru"), resourcePath)
             )
         )
