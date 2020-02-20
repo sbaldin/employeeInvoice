@@ -21,7 +21,11 @@ class LocalBankInvoice(
     override fun generate(): PoiInvoice {
         val document = XWPFDocument()
         document.apply {
-            singleLineParagraph("Инвойс № ${employeeDetails.getInvoiceNumber()} от ${employeeDetails.formattedInvoiceDate(Locale("ru"))}") {
+            singleLineParagraph(
+                "Инвойс № ${employeeDetails.getInvoiceNumber()} от ${employeeDetails.formattedInvoiceDate(
+                    Locale("ru")
+                )}"
+            ) {
                 it.style = "Heading1"
                 it.alignment = ParagraphAlignment.CENTER
                 setSingleLineSpacing(it)
@@ -31,12 +35,9 @@ class LocalBankInvoice(
                 run.isBold = true
             }
             createMonthRateTable()
-
             singleLineParagraph("Оплатить в срок до ${employeeDetails.formattedPaymentDeadline(Locale("ru"))}.")
-
             createForeignBankDetailsTable()
             createLocalBankDetails()
-
             singleLineParagraph("Подпись ") {
                 val run = it.runs.first()
                 run.fontFamily = "Roboto"
@@ -53,10 +54,8 @@ class LocalBankInvoice(
     }
 
     private fun XWPFDocument.createMonthRateTable() {
-        val monthRateTable = createTable(2, 2).apply {
-            //create first row
-            //create first row
-            
+        val monthRateTable = createTable(3, 2).apply {
+
             val tableRowOne: XWPFTableRow = rows[0]
             setTextWithDefaultStyle(tableRowOne.getCell(0), "Описание услуг")
             setTextWithDefaultStyle(tableRowOne.getCell(1), "стоимость")
@@ -69,6 +68,12 @@ class LocalBankInvoice(
 
             setTextWithDefaultStyle(tableRowTwo.getCell(0), jobDesc)
             setTextWithDefaultStyle(tableRowTwo.getCell(1), "$ ${employeeDetails.monthRate}")
+
+            val tableRowThree: XWPFTableRow = rows[2]
+
+            setTextWithDefaultStyle(tableRowThree.getCell(0), "Возмещение дополнительных расходов")
+            setTextWithDefaultStyle(tableRowThree.getCell(1), "$ ${employeeDetails.additionalExpenses}")
+
         }
         createParagraph().body.insertTable(0, monthRateTable)
     }

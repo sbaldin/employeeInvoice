@@ -1,0 +1,30 @@
+employee:
+  name: Ivan Ivanov
+  contractDate: 1970-01-01
+  serviceProvider: Platform Development
+  vacationDaysInMonth: 1
+  vacationDaysInYear: 2
+  monthRate: 1000
+  additionalExpenses: 100
+  signPath: build/resources/main/sign.png # path to your signature, leave empty to leave signature field empty
+banking:
+  local:
+    ru:
+      name: AO «BANK»
+      accountNumber: 0000 0000 0000 0000 0001
+      country: Россия
+      address: Московия, пр Ленина, д.1, кв. 1
+      beneficiaryName:  ИП Иванов Иван Иванович
+      beneficiaryAddress: Россия, Кем область, г. Кемерово, пр. Ленина, д.2., кв. 2,
+    en:
+      name: AO «BANK»
+      accountNumber: 0000 0000 0000 0000 0001
+      country: Russia
+      address: 27 Lenina str., Moscow, 107078, tel +7 495 755-58-58, SWIFT BANKRUM
+      beneficiaryName: IP Ivanov Ivan Ivanovich
+      beneficiaryAddress: PR. LENINA, D. 1, KV. 1, KEMEROVO, RUSSIA, 650000
+  foreign:
+    name: BANK
+    accountNumber: 000000101
+    contractorName: BigCompany LLC
+    address: 10 10th Street NE Atlanta, GA 30309 United States

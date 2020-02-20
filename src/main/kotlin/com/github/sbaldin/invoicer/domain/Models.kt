@@ -1,5 +1,6 @@
 package com.github.sbaldin.invoicer.domain
 
+import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -17,6 +18,20 @@ enum class AppRunTypeEnum {
 enum class ResultFileTypeEnum(val title: String) {
     PDF("Application will produce full-filled pdf files with signatures."),
     OFFICE("Application will produce editable docx and xlsx files without signature.")
+}
+
+data class LocalizedLocalBankingModel(
+    private val modelByLocale: Map<Locale, LocalBankingModel>
+) {
+
+    fun <T> withLocalization(locale: Locale, body: (LocalBankingModel) -> T) {
+        val model = getModel(locale)
+        body(model)
+    }
+
+    fun getModel(locale: Locale) =
+        modelByLocale[locale] ?: throw IllegalArgumentException("Missing Local Banking Model for giving locale = $locale!")
+
 }
 
 data class LocalBankingModel(
@@ -46,14 +61,10 @@ data class EmployeeDetailsModel(
     val additionalExpenses: Int
 ) {
 
-    init {
-
-    }
-
-    fun formattedContractDate() = SimpleDateFormat("dd.MM.yyyy").format(contractDate)
+    fun formattedContractDate(pattern: String = "dd.MM.yyyy") = SimpleDateFormat(pattern).format(contractDate)
     fun formattedInvoiceDate(locale: Locale): String {
         return if (locale == Locale.ENGLISH) {
-            DateTimeFormatter.ofPattern("dd MMMMM yyyy").withLocale(locale).format(getNowLocalDate())
+            DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(locale).format(getNowLocalDate())
         } else {
             DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale("ru")).format(getNowLocalDate())
         }
