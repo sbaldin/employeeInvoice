@@ -6,14 +6,14 @@ import com.github.sbaldin.invoicer.generator.invoice.poi.ForeignBankInvoice
 import com.github.sbaldin.invoicer.generator.invoice.PoiInvoice
 import com.github.sbaldin.invoicer.generator.invoice.poi.LocalBankInvoice
 import com.github.sbaldin.invoicer.generator.invoice.PdfInvoice
+import java.util.*
 import com.github.sbaldin.invoicer.generator.invoice.pdf.ForeignBankInvoice as PDFForeignBankInvoice
 import com.github.sbaldin.invoicer.generator.invoice.pdf.LocalBankInvoice as PDFLocalBankInvoice
 
 
 class InvoiceFactory(
-    private val appConf: AppConf,
     private val employeeDetails: EmployeeDetailsModel,
-    private val localBankingModel: LocalBankingModel,
+    private val localizedLocalBankingModel: LocalizedLocalBankingModel,
     private val foreignBankingModel: ForeignBankingModel
 ) {
 
@@ -21,23 +21,23 @@ class InvoiceFactory(
         FOREIGN_BANK_INVOICE -> listOf(
             ForeignBankInvoice(
                 employeeDetails,
-                localBankingModel
+                localizedLocalBankingModel.getModel(Locale.ENGLISH)
             ).generate()
         )
         LOCAL_BANK_INVOICE -> listOf(
             LocalBankInvoice(
                 employeeDetails,
-                localBankingModel,
+                localizedLocalBankingModel.getModel(Locale("ru")),
                 foreignBankingModel
             ).generate()
         )
         BOTH -> listOf(
             ForeignBankInvoice(
                 employeeDetails,
-                localBankingModel
+                localizedLocalBankingModel.getModel(Locale.ENGLISH)
             ).generate(), LocalBankInvoice(
                 employeeDetails,
-                localBankingModel,
+                localizedLocalBankingModel.getModel(Locale("ru")),
                 foreignBankingModel
             ).generate()
         )
@@ -47,7 +47,7 @@ class InvoiceFactory(
         FOREIGN_BANK_INVOICE -> listOf(
             PDFForeignBankInvoice(
                 employeeDetails,
-                localBankingModel,
+                localizedLocalBankingModel.getModel(Locale.ENGLISH),
                 foreignBankingModel,
                 "/invoice_foreign.html"
             ).generate()
@@ -55,7 +55,7 @@ class InvoiceFactory(
         LOCAL_BANK_INVOICE -> listOf(
             PDFLocalBankInvoice(
                 employeeDetails,
-                localBankingModel,
+                localizedLocalBankingModel.getModel(Locale("ru")),
                 foreignBankingModel,
                 "/invoice_local.html"
             ).generate()
@@ -63,13 +63,13 @@ class InvoiceFactory(
         BOTH -> listOf(
             PDFForeignBankInvoice(
                 employeeDetails,
-                localBankingModel,
+                localizedLocalBankingModel.getModel(Locale.ENGLISH),
                 foreignBankingModel,
                 "/invoice_foreign.html"
             ).generate(),
             PDFLocalBankInvoice(
                 employeeDetails,
-                localBankingModel,
+                localizedLocalBankingModel.getModel(Locale("ru")),
                 foreignBankingModel,
                 "/invoice_local.html"
             ).generate()
