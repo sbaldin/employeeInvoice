@@ -33,7 +33,7 @@ class ForeignBankInvoice(
         root["foreignBankingDetails"] = foreignBankingModel
         root["formattedContractDate"] = employeeDetails.formattedContractDate()
         root["formattedPaymentDeadline"] = employeeDetails.formattedPaymentDeadline(Locale.US)
-        root["formattedInvoiceDate"] = employeeDetails.formattedInvoiceDate(Locale.US)
+        root["formattedInvoiceDate"] = employeeDetails.formattedInvoiceDate(Locale.US, "MMMM dd, yyyy")
         root["localBankingDetails"] = localBankingModel
         root["foreignBankingDetails"] = foreignBankingModel
         root["signPath"] = "./" + employeeDetails.signPath

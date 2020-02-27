@@ -5,12 +5,6 @@ import com.github.sbaldin.invoicer.domain.ForeignBankingModel
 import com.github.sbaldin.invoicer.domain.LocalBankingModel
 import com.github.sbaldin.invoicer.generator.invoice.InvoiceGenerator
 import com.github.sbaldin.invoicer.generator.invoice.PdfInvoice
-import freemarker.template.Configuration
-import freemarker.template.Template
-import freemarker.template.TemplateExceptionHandler
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStreamWriter
 import java.util.*
 
 
