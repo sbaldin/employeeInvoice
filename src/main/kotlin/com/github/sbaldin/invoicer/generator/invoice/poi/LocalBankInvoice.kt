@@ -22,9 +22,7 @@ class LocalBankInvoice(
         val document = XWPFDocument()
         document.apply {
             singleLineParagraph(
-                "Инвойс № ${employeeDetails.getInvoiceNumber()} от ${employeeDetails.formattedInvoiceDate(
-                    Locale("ru")
-                )}"
+                "Инвойс № ${employeeDetails.getInvoiceNumber()} от ${employeeDetails.formattedInvoiceDate(Locale("ru"))}"
             ) {
                 it.style = "Heading1"
                 it.alignment = ParagraphAlignment.CENTER

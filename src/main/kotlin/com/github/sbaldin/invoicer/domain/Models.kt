@@ -2,7 +2,6 @@ package com.github.sbaldin.invoicer.domain
 
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
@@ -62,9 +61,9 @@ data class EmployeeDetailsModel(
 ) {
 
     fun formattedContractDate(pattern: String = "dd.MM.yyyy") = SimpleDateFormat(pattern).format(contractDate)
-    fun formattedInvoiceDate(locale: Locale): String {
-        return if (locale == Locale.ENGLISH) {
-            DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(locale).format(getNowLocalDate())
+    fun formattedInvoiceDate(locale: Locale, pattern: String = "dd MMMM yyyy"): String {
+        return if (locale == Locale.US) {
+            DateTimeFormatter.ofPattern(pattern).withLocale(locale).format(getNowLocalDate())
         } else {
             DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale("ru")).format(getNowLocalDate())
         }
