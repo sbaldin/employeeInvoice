@@ -16,55 +16,58 @@ import java.util.*
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
 
+private fun readAppConf(appConfPath: String, resourcePath: String = "application-invoicer.yaml") =
+    Config().from.yaml.resource(resourcePath)
+        .from.yaml.file(appConfPath, optional = true)
+        .at("app").toValue<AppConf>()
+
+private fun employeeDetails(employeeConfPath: String, resourcePath: String = "employee.yaml") =
+    Config().from.yaml.resource(resourcePath)
+        .from.yaml.file(employeeConfPath, optional = true)
+        .at("employee").toValue<EmployeeDetailsModel>()
+
+private fun readLocalizedLocalBankingDetails(employeeConfPath: String, resourcePath: String = "employee.yaml") =
+    LocalizedLocalBankingModel(
+        mapOf(
+            Locale.ENGLISH to readLocalBankingDetails(employeeConfPath, Locale.ENGLISH, resourcePath),
+            Locale("ru") to readLocalBankingDetails(employeeConfPath, Locale("ru"), resourcePath)
+        )
+    )
+
+private fun readLocalBankingDetails(employeeConfPath: String, locale: Locale, resourcePath: String = "employee.yaml") =
+    Config().from.yaml.resource(resourcePath)
+        .from.yaml.file(employeeConfPath, optional = true)
+        .at("banking").at("local").at(locale.language.toLowerCase()).toValue<LocalBankingModel>()
+
+private fun readForeignBankingDetails(employeeConfPath: String, resourcePath: String = "employee.yaml") =
+    Config().from.yaml.resource(resourcePath)
+        .from.yaml.file(employeeConfPath, optional = true)
+        .at("banking").at("foreign").toValue<ForeignBankingModel>()
+
 class Application {
 
-
-    private fun readAppConf(appConfPath: String, resourcePath: String = "application-invoicer.yaml") =
-        Config().from.yaml.resource(resourcePath)
-            .from.yaml.file(appConfPath)
-            .at("app").toValue<AppConf>()
-
-    private fun employeeDetails(employeeConfPath: String, resourcePath: String = "employee.yaml") =
-        Config().from.yaml.resource(resourcePath)
-            .from.yaml.file(employeeConfPath)
-            .at("employee").toValue<EmployeeDetailsModel>()
-
-    private fun readLocalizedLocalBankingDetails(employeeConfPath: String, resourcePath: String = "employee.yaml") =
-        LocalizedLocalBankingModel(
-            mapOf(
-                Locale.ENGLISH to readLocalBankingDetails(employeeConfPath, Locale.ENGLISH, resourcePath),
-                Locale("ru") to readLocalBankingDetails(employeeConfPath, Locale("ru"), resourcePath)
-            )
-        )
-
-    private fun readLocalBankingDetails(employeeConfPath: String, locale: Locale, resourcePath: String = "employee.yaml") =
-        Config().from.yaml.resource(resourcePath)
-            .from.yaml.file(employeeConfPath)
-            .at("banking").at("local").at(locale.language.toLowerCase()).toValue<LocalBankingModel>()
-
-    private fun readForeignBankingDetails(employeeConfPath: String, resourcePath: String = "employee.yaml") =
-        Config().from.yaml.resource(resourcePath)
-            .from.yaml.file(employeeConfPath)
-            .at("banking").at("foreign").toValue<ForeignBankingModel>()
-
-    fun run() {
-        val appConfPath = System.getProperty("appConfig") ?: "./application-invoicer.yaml"
+    fun createInvoiceFactory(): InvoiceFactory {
         val employeeConfPath = System.getProperty("employeeConfig") ?: "./employee.yaml"
-        log.info("Application config path:$appConfPath")
-        log.info("Employee config path:$appConfPath")
+        log.info("Employee config path:$employeeConfPath")
 
         System.getProperty("invoiceDate")?.let {
-            setNow(SimpleDateFormat("dd.mm.yy").parse(it))
+            setNow(SimpleDateFormat("dd.MM.yyyy").parse(it))
             log.info("Following date will be used instead of `now` ${getNow()}")
         }
 
-        val appConf = readAppConf(appConfPath)
-
-        val invoiceFactory = InvoiceFactory(
+        return InvoiceFactory(
             employeeDetails(employeeConfPath = employeeConfPath),
             readLocalizedLocalBankingDetails(employeeConfPath = employeeConfPath),
             readForeignBankingDetails(employeeConfPath = employeeConfPath)
         )
+    }
+
+    fun run() {
+        val appConfPath = System.getProperty("appConfig") ?: "./application-invoicer.yaml"
+        log.info("Application config path:$appConfPath")
+        val appConf = readAppConf(appConfPath)
+
+        val invoiceFactory = createInvoiceFactory()
 
         val outputPath = System.getProperty("user.home") + appConf.outputPath
         log.info("Invoice generation started. \n ${appConf.resultFileType.title}")
