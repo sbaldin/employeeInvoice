@@ -32,7 +32,7 @@ plugins {
 }
 
 group 'com.github.sbaldin'
-version '0.3.2'
+version '0.3.3'
 
 mainClassName = "com.github.sbaldin.invoicer.ApplicationKt"
 defaultTasks 'run'
