@@ -53,7 +53,7 @@ class ReadConfigsSpec : Spek({
                 val employeeDetails = readEmployeeDetails()
                 assertEquals(employeeDetails.name, "Ivan Ivanov")
                 val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-                sdf.timeZone = TimeZone.getTimeZone("GMT");
+                sdf.timeZone = TimeZone.getTimeZone("GMT")
                 assertEquals(employeeDetails.contractDate, sdf.parse("2019-12-31"))
                 assertEquals(employeeDetails.serviceProvider, "Platform Development")
                 assertEquals(employeeDetails.vacationDaysInMonth, 10)

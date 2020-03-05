@@ -1,21 +1,15 @@
 import com.github.sbaldin.invoicer.Application
 import com.github.sbaldin.invoicer.domain.getNow
 import com.github.sbaldin.invoicer.domain.setNow
-import com.github.sbaldin.invoicer.readAppConf
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.spyk
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import kotlin.test.assertEquals
 
 class InvoiceDateSpec : Spek({
-
     given("Invoice Date Changeability") {
         on("System properties have invoiceDate") {
             it("Now Date should be replaced by system property invoiceDate") {
@@ -31,7 +25,6 @@ class InvoiceDateSpec : Spek({
                 System.setProperty("invoiceDate", "1.1.2020")
                 app.createInvoiceFactory()
                 assertEquals(SimpleDateFormat("dd.MM.yyyy").parse(System.getProperty("invoiceDate")), getNow())
-
             }
         }
         on("System properties have no invoiceDate") {

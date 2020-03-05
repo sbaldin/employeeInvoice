@@ -23,33 +23,43 @@ import java.util.Locale
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
 
-fun readAppConf(appConfPath: String = "", resourcePath: String = "application-invoicer.yaml") =
-    Config().from.yaml.resource(resourcePath)
-        .from.yaml.file(appConfPath, optional = true)
-        .at("app").toValue<AppConf>()
+fun readAppConf(
+    appConfPath: String = "",
+    resourcePath: String = "application-invoicer.yaml"
+) = Config().from.yaml.resource(resourcePath)
+    .from.yaml.file(appConfPath, optional = true)
+    .at("app").toValue<AppConf>()
 
-fun readEmployeeDetails(employeeConfPath: String = "", resourcePath: String = "employee.yaml") =
-    Config().from.yaml.resource(resourcePath)
-        .from.yaml.file(employeeConfPath, optional = true)
-        .at("employee").toValue<EmployeeDetailsModel>()
+fun readEmployeeDetails(
+    employeeConfPath: String = "",
+    resourcePath: String = "employee.yaml"
+) = Config().from.yaml.resource(resourcePath)
+    .from.yaml.file(employeeConfPath, optional = true)
+    .at("employee").toValue<EmployeeDetailsModel>()
 
-fun readLocalizedLocalBankingDetails(employeeConfPath: String = "", resourcePath: String = "employee.yaml") =
-    LocalizedLocalBankingModel(
-        mapOf(
-            Locale.ENGLISH to readLocalBankingDetails(employeeConfPath, Locale.ENGLISH, resourcePath),
-            Locale("ru") to readLocalBankingDetails(employeeConfPath, Locale("ru"), resourcePath)
-        )
+fun readLocalizedLocalBankingDetails(
+    employeeConfPath: String = "",
+    resourcePath: String = "employee.yaml"
+) = LocalizedLocalBankingModel(
+    mapOf(
+        Locale.ENGLISH to readLocalBankingDetails(employeeConfPath, Locale.ENGLISH, resourcePath),
+        Locale("ru") to readLocalBankingDetails(employeeConfPath, Locale("ru"), resourcePath)
     )
+)
 
-fun readLocalBankingDetails(employeeConfPath: String = "", locale: Locale  = Locale("ru"), resourcePath: String = "employee.yaml") =
-    Config().from.yaml.resource(resourcePath)
-        .from.yaml.file(employeeConfPath, optional = true)
-        .at("banking").at("local").at(locale.language.toLowerCase()).toValue<LocalBankingModel>()
+fun readLocalBankingDetails(
+    employeeConfPath: String = "",
+    locale: Locale = Locale("ru"),
+    resourcePath: String = "employee.yaml"
+) = Config().from.yaml.resource(resourcePath).from.yaml.file(employeeConfPath, optional = true)
+    .at("banking").at("local")
+    .at(locale.language.toLowerCase()).toValue<LocalBankingModel>()
 
-fun readForeignBankingDetails(employeeConfPath: String = "", resourcePath: String = "employee.yaml") =
-    Config().from.yaml.resource(resourcePath)
-        .from.yaml.file(employeeConfPath, optional = true)
-        .at("banking").at("foreign").toValue<ForeignBankingModel>()
+fun readForeignBankingDetails(
+    employeeConfPath: String = "",
+    resourcePath: String = "employee.yaml"
+) = Config().from.yaml.resource(resourcePath).from.yaml.file(employeeConfPath, optional = true)
+    .at("banking").at("foreign").toValue<ForeignBankingModel>()
 
 class Application(
     private val appConf: AppConf = readAppConf(),
