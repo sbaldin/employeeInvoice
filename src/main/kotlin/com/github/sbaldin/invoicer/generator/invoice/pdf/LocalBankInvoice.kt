@@ -5,8 +5,7 @@ import com.github.sbaldin.invoicer.domain.ForeignBankingModel
 import com.github.sbaldin.invoicer.domain.LocalBankingModel
 import com.github.sbaldin.invoicer.generator.invoice.InvoiceGenerator
 import com.github.sbaldin.invoicer.generator.invoice.PdfInvoice
-import java.util.*
-
+import java.util.Locale
 
 class LocalBankInvoice(
     employeeDetails: EmployeeDetailsModel,
@@ -36,4 +35,3 @@ class LocalBankInvoice(
         return root
     }
 }
-

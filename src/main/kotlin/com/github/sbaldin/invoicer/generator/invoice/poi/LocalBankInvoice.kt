@@ -5,12 +5,16 @@ import com.github.sbaldin.invoicer.domain.ForeignBankingModel
 import com.github.sbaldin.invoicer.domain.LocalBankingModel
 import com.github.sbaldin.invoicer.generator.invoice.InvoiceGenerator
 import com.github.sbaldin.invoicer.generator.invoice.PoiInvoice
-import org.apache.poi.xwpf.usermodel.*
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment
+import org.apache.poi.xwpf.usermodel.UnderlinePatterns
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFParagraph
+import org.apache.poi.xwpf.usermodel.XWPFTableCell
+import org.apache.poi.xwpf.usermodel.XWPFTableRow
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STLineSpacingRule
 import java.math.BigInteger
-import java.util.*
-
+import java.util.Locale
 
 class LocalBankInvoice(
     private val employeeDetails: EmployeeDetailsModel,
@@ -53,16 +57,16 @@ class LocalBankInvoice(
 
     private fun XWPFDocument.createMonthRateTable() {
         val monthRateTable = createTable(3, 2).apply {
-
             val tableRowOne: XWPFTableRow = rows[0]
             setTextWithDefaultStyle(tableRowOne.getCell(0), "Описание услуг")
             setTextWithDefaultStyle(tableRowOne.getCell(1), "стоимость")
 
             val tableRowTwo: XWPFTableRow = rows[1]
-            //TODO fix format here
-            val jobDesc = "Разработка и поддержка программного обеспечения по договору " +
-                    "об оказании услуг от ${employeeDetails.formattedContractDate()}" +
-                    " за ${employeeDetails.formattedInvoiceDate(Locale("ru"))}."
+            val jobDesc =
+                """Разработка и поддержка программного обеспечения
+                   по договору об оказании услуг
+                   от ${employeeDetails.formattedContractDate()}
+                   за ${employeeDetails.formattedInvoiceDate(Locale("ru"))}."""
 
             setTextWithDefaultStyle(tableRowTwo.getCell(0), jobDesc)
             setTextWithDefaultStyle(tableRowTwo.getCell(1), "$ ${employeeDetails.monthRate}")
@@ -71,7 +75,6 @@ class LocalBankInvoice(
 
             setTextWithDefaultStyle(tableRowThree.getCell(0), "Возмещение дополнительных расходов")
             setTextWithDefaultStyle(tableRowThree.getCell(1), "$ ${employeeDetails.additionalExpenses}")
-
         }
         createParagraph().body.insertTable(0, monthRateTable)
     }
@@ -83,8 +86,7 @@ class LocalBankInvoice(
         titleRun.setText("Выставлен:")
         setDoublerLineSpacing(titleParagraph)
         val foreignBankDetailsTable = createTable(4, 2).apply {
-            //create first row
-            //create first row
+            // create first row
             val bankName: XWPFTableRow = getRow(0)
 
             setTextWithDefaultStyle(bankName.getCell(0), "Наименование Банка")
@@ -112,9 +114,7 @@ class LocalBankInvoice(
         titleRun.setText("Получатель:")
         setDoublerLineSpacing(titleParagraph)
         val localBankDetailsTable = createTable(4, 2).apply {
-
-            //create first row
-            //create first row
+            // create first row
             val bankName: XWPFTableRow = getRow(0)
             setTextWithDefaultStyle(bankName.getCell(0), "Наименование Банка")
             setTextWithDefaultStyle(bankName.getCell(1), localBankingModel.name)
@@ -149,7 +149,7 @@ class LocalBankInvoice(
 
     private fun setTextWithDefaultStyle(cell: XWPFTableCell, text: String) {
         cell.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-        //Can't get first paragraph with elegant way, looks like ugly code is major feature of Apache POI
+        // Can't get first paragraph with elegant way, looks like ugly code is major feature of Apache POI
         val ctP: CTP = if (cell.ctTc.sizeOfPArray() == 0) cell.ctTc.addNewP() else cell.ctTc.getPArray(0)
         val paragraph = XWPFParagraph(ctP, cell)
         setSingleLineSpacing(paragraph)

@@ -8,10 +8,10 @@ class SaveAsOfficeDocumentProcessor(outputPath: String) : ResultFileProcessor<Po
 
     val log = LoggerFactory.getLogger(SaveAsOfficeDocumentProcessor::class.java)
 
-    override fun process(invoices: List<PoiInvoice>){
+    override fun process(invoices: List<PoiInvoice>) {
         invoices.forEach {
-            log.info("Saving to file ${outputPath}/${it.name}")
-            it.document.write(File("${outputPath}/${it.name}").outputStream())
+            log.info("Saving to file $outputPath/${it.name}")
+            it.document.write(File("$outputPath/${it.name}").outputStream())
         }
     }
 }

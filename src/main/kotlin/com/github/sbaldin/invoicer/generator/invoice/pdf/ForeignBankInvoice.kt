@@ -5,9 +5,8 @@ import com.github.sbaldin.invoicer.domain.ForeignBankingModel
 import com.github.sbaldin.invoicer.domain.LocalBankingModel
 import com.github.sbaldin.invoicer.generator.invoice.InvoiceGenerator
 import com.github.sbaldin.invoicer.generator.invoice.PdfInvoice
-import java.util.*
+import java.util.Locale
 import kotlin.collections.HashMap
-
 
 class ForeignBankInvoice(
     employeeDetails: EmployeeDetailsModel,
@@ -37,10 +36,9 @@ class ForeignBankInvoice(
         root["localBankingDetails"] = localBankingModel
         root["foreignBankingDetails"] = foreignBankingModel
         root["signPath"] = "./" + employeeDetails.signPath
-        if(employeeDetails.signPath.isNotBlank()){
+        if (employeeDetails.signPath.isNotBlank()) {
             root["signPath"] = "./" + employeeDetails.signPath
         }
         return root
     }
 }
-

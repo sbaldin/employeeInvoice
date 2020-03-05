@@ -8,8 +8,7 @@ import com.github.sbaldin.invoicer.generator.invoice.PoiInvoice
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.time.format.DateTimeFormatter
-import java.util.*
-
+import java.util.Locale
 
 class ForeignBankInvoice(
     private val employeeDetails: EmployeeDetailsModel,
@@ -34,25 +33,25 @@ class ForeignBankInvoice(
                         rowIndex += 2 // skipping rows
                         setRowValue(rowIndex++, 1, employeeDetails.vacationDaysInMonth)
                         setRowValue(rowIndex++, 1, employeeDetails.vacationDaysInYear)
-                        rowIndex++    // skipping rows
+                        rowIndex++ // skipping rows
                         setRowValue(rowIndex++, 1, employeeDetails.monthRate)
                         setRowValue(rowIndex++, 1, 0) // employeeDetails.additionalExpenses
-                        rowIndex++    // skipping rows
+                        rowIndex++ // skipping rows
                         setRowValue(rowIndex++, 1, employeeDetails.monthRate) // employeeDetails.additionalExpenses
                         rowIndex += 3 // skipping rows
                         setRowValue(rowIndex++, 1, localBankingModel.name)
                         setRowValue(rowIndex++, 1, localBankingModel.accountNumber)
                         setRowValue(rowIndex++, 1, localBankingModel.country)
                         setRowValue(rowIndex++, 1, localBankingModel.address)
-                        rowIndex += 6
+                        rowIndex += 6 // skipping rows
                         setRowValue(rowIndex++, 1, localBankingModel.beneficiaryName)
                         setRowValue(rowIndex, 1, localBankingModel.beneficiaryAddress)
                     }
                 }
-            })
+            }
+        )
 
     private fun XSSFSheet.setRowValue(rowIndex: Int, cellIndex: Int, value: Any) {
         getRow(rowIndex).getCell(cellIndex).setCellValue(value.toString())
     }
 }
-
