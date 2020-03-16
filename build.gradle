@@ -1,4 +1,3 @@
-import java.time.LocalDate
 
 buildscript {
 
@@ -10,6 +9,7 @@ buildscript {
         poiVersion = '3.12'
         konfVersion = '0.20.0'
         mockkversion = '1.9'
+        junitVersion = '1.0.2'
         userHomePath = System.properties["user.home"]
         destinationPath = userHomePath + "/.${rootProject.name}"
     }
@@ -22,8 +22,10 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
+
 
 plugins {
     id "org.jetbrains.kotlin.jvm" version '1.3.60'
@@ -88,6 +90,11 @@ dependencies {
         exclude group: 'org.junit.platform'
         exclude group: 'org.jetbrains.kotlin'
     }
+
+    testRuntime "org.junit.platform:junit-platform-runner:$junitVersion"
+    testRuntime "org.junit.platform:junit-platform-console:$junitVersion"
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.2'
 }
 
 compileKotlin {
@@ -96,9 +103,13 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+test{
+    useJUnitPlatform {
+        includeEngines 'spek'
+    }
+}
 
 //build.dependsOn shadowJar
-
 jar {
     zip64 true
     manifest {
