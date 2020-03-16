@@ -43,18 +43,19 @@ abstract class AbstractPdfBankInvoice(
         val root = gePlaceholderModel()
 
         /* Get the template (uses cache internally) */
-        val temp: Template = cfg.getTemplate(templatePath)
+        val template: Template = cfg.getTemplate(templatePath)
 
         /* Merge data-model with template */
-        val htmlFilePath = "./filled_template${Random.nextInt()}.html"
-        val invoiceFile = File(htmlFilePath)
+        val invoiceFile = File(fullFilledTemplatePath())
         val out = OutputStreamWriter(FileOutputStream(invoiceFile))
-        temp.process(root, out)
+        template.process(root, out)
         // Note: Depending on what `out` is, you may need to call `out.close()`.
         // This is usually the case for file output, but not for servlet output.
         out.close()
         return invoiceFile
     }
+
+    protected fun fullFilledTemplatePath() = "./full_filled_template${Random.nextInt()}.html"
 
     abstract fun gePlaceholderModel(): HashMap<String, Any?>
 }

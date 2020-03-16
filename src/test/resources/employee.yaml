@@ -11,11 +11,11 @@ banking:
   local:
     ru:
       name: AO «BANK»
-      accountNumber: 0000 0000 0000 0001 0001
+      accountNumber: 0000 0000 0000 0001 1111
       country: Россия
       address: Казань, пр Ленина, д.1, кв. 1
       beneficiaryName:  ИП Сергей Сергеевич Сергеев
-      beneficiaryAddress: Россия, Татарстан, г. Казань, пр. Ленина, д.1., кв. 1,
+      beneficiaryAddress: Россия, Татарстан, г. Казань, пр. Ленина, д.1., кв. 1
     en:
       name: AO «BANK»
       accountNumber: 0000 0000 0000 0001 0001
