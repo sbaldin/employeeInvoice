@@ -45,9 +45,8 @@ class PdfInvoiceSpec : Spek({
 
                 val formattedContractDate = employeeDetails.formattedContractDate()
                 val dateOfService = employeeDetails.getDateOfService(Locale("ru"))
-                val expectedText1 = """
-                    Разработка и поддержка программного обеспечения по договору об оказании услуг от $formattedContractDate за $dateOfService года
-                                           """.trimIndent()
+                val expectedText1 =
+                    """Разработка и поддержка программного обеспечения по договору об оказании услуг от $formattedContractDate за $dateOfService года""".trimIndent()
 
                 val formatter = NumberFormat.getInstance(Locale("en_US"))
 
@@ -117,14 +116,12 @@ class PdfInvoiceSpec : Spek({
                     model.address,
                     localBankingDetailsAddress.html().trim()
                 )
-
             }
 
             it("html file of invoice should contains correct sign-path") {
                 val signPath = jsoupDoc.getElementById("sign-path")
                 assertEquals("build/resources/main/sign.png", signPath.attr("src"))
             }
-
         }
     }
 })
