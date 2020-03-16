@@ -98,7 +98,7 @@
 
 <body>
 
-<h1>Инвойс № ${employee.invoiceNumber} от ${formattedInvoiceDate}</h1>
+<h1 id="invoice-title">Инвойс № ${employee.invoiceNumber} от ${formattedInvoiceDate}</h1>
 
 <table class="root">
     <tr>
@@ -106,11 +106,11 @@
         <th>стоимость</th>
     </tr>
     <tr>
-        <td class="main-text-block">
+        <td class="main-text-block" id="main-text-1">
             Разработка и поддержка программного обеспечения по договору
             об оказании услуг от ${formattedContractDate} за ${dateOfService} года
         </td>
-        <td class="main-text-block">
+        <td class="main-text-block" id="main-text-2">
             $ ${employee.monthRate}
         </td>
     </tr>
@@ -118,34 +118,33 @@
         <td class="main-text-block">
             Возмещение дополнительных расходов
         </td>
-        <td class="main-text-block">
+        <td class="main-text-block" id="main-text-3">
             $ ${employee.additionalExpenses}
         </td>
     </tr>
 
 </table>
 
-<p>Оплатить в срок до ${formattedPaymentDeadline}</p>
+<p id="deadline-text">Оплатить в срок до ${formattedPaymentDeadline}</p>
 <div class="table-container">
     <p>Выставлен:</p>
 
     <table class="root">
-
         <tr>
             <td>Наименование Банка</td>
-            <td>${foreignBankingDetails.name}</td>
+            <td id="foreign-banking-details-name">${foreignBankingDetails.name}</td>
         </tr>
         <tr>
             <td>Номер Счета</td>
-            <td>${foreignBankingDetails.accountNumber}</td>
+            <td id="foreign-banking-details-account-number">${foreignBankingDetails.accountNumber}</td>
         </tr>
         <tr>
             <td>Имя Отправителя</td>
-            <td>${foreignBankingDetails.contractorName}</td>
+            <td id="foreign-banking-details-contractor-name">${foreignBankingDetails.contractorName}</td>
         </tr>
         <tr>
             <td>Адрес</td>
-            <td>${foreignBankingDetails.address}</td>
+            <td id="foreign-banking-details-address">${foreignBankingDetails.address}</td>
         </tr>
     </table>
 </div>
@@ -157,25 +156,25 @@
 
         <tr>
             <td>Наименование Банка</td>
-            <td>${localBankingDetails.name}</td>
+            <td id="local-banking-details-name">${localBankingDetails.name}</td>
         </tr>
         <tr>
             <td>Номер Счета</td>
-            <td>${localBankingDetails.accountNumber}</td>
+            <td id="local-banking-details-account-number">${localBankingDetails.accountNumber}</td>
         </tr>
         <tr>
             <td>Имя Получателя</td>
-            <td>${localBankingDetails.beneficiaryName}</td>
+            <td id="local-banking-details-beneficiary-name">${localBankingDetails.beneficiaryName}</td>
         </tr>
         <tr>
             <td>Адрес</td>
-            <td>${localBankingDetails.address}</td>
+            <td id="local-banking-details-address" >${localBankingDetails.address}</td>
         </tr>
     </table>
 </div>
 
 <div>
-    <p class="bold signature">Подпись <span class="signature-line"> </span> <img src="${employee.signPath}" alt=""></p>
+    <p class="bold signature">Подпись <span class="signature-line"> </span> <img id="sign-path" src="${employee.signPath}" alt=""></p>
 </div>
 
 </body>
