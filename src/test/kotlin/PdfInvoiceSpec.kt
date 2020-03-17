@@ -14,7 +14,7 @@ import java.util.Locale
 import kotlin.test.assertEquals
 
 class PdfInvoiceSpec : Spek({
-    given("Pdf Invoicer") {
+    given("User generate PDF Invoice") {
         val localizedLocalBankingDetails = readLocalizedLocalBankingDetails()
         val employeeDetails = readEmployeeDetails()
         val foreignBankingDetails = readForeignBankingDetails()
@@ -24,13 +24,15 @@ class PdfInvoiceSpec : Spek({
             localizedLocalBankingDetails,
             foreignBankingDetails
         ).createInvoiceFactory()
+        val invoiceLocal = factory.getPdfInvoiceList(AppRunTypeEnum.LOCAL_BANK_INVOICE).first()
+        val invoiceForeign = factory.getPdfInvoiceList(AppRunTypeEnum.FOREIGN_BANK_INVOICE).first()
 
-        val invoice = factory.getPdfInvoiceList(AppRunTypeEnum.LOCAL_BANK_INVOICE).first()
-        val jsoupDoc = Jsoup.parse(invoice.document, Charsets.UTF_8.displayName())
         afterGroup {
-            invoice.document.deleteOnExit()
+            invoiceLocal.document.deleteOnExit()
+            invoiceForeign.document.deleteOnExit()
         }
         on("User tries to generate local bank invoice") {
+            val jsoupDoc = Jsoup.parse(invoiceLocal.document, Charsets.UTF_8.displayName())
 
             it("html version of invoice should contain correct title") {
                 val invoiceTitle = jsoupDoc.getElementById("invoice-title")
@@ -57,7 +59,6 @@ class PdfInvoiceSpec : Spek({
                 assertEquals(expectedText2, mainTextBlock2.html().trim())
                 assertEquals(expectedText3, mainTextBlock3.html().trim())
             }
-
             it("html version of invoice should contain correct deadline info") {
                 val deadLineText = jsoupDoc.getElementById("deadline-text")
                 assertEquals(
@@ -65,7 +66,6 @@ class PdfInvoiceSpec : Spek({
                     deadLineText.html().trim()
                 )
             }
-
             it("html version of invoice should contain correct foreign bank details") {
                 val foreignBankingDetailsName = jsoupDoc.getElementById("foreign-banking-details-name")
                 val foreignBankingDetailsAccountNumber =
@@ -91,7 +91,6 @@ class PdfInvoiceSpec : Spek({
                     foreignBankingDetailsAddress.html().trim()
                 )
             }
-
             it("html file of invoice should be full fulled by correct data") {
                 val localBankingDetailsName = jsoupDoc.getElementById("local-banking-details-name")
                 val localBankingDetailsAccountNumber = jsoupDoc.getElementById("local-banking-details-account-number")
@@ -117,7 +116,75 @@ class PdfInvoiceSpec : Spek({
                     localBankingDetailsAddress.html().trim()
                 )
             }
+            it("html file of invoice should contains correct sign-path") {
+                val signPath = jsoupDoc.getElementById("sign-path")
+                assertEquals("build/resources/main/sign.png", signPath.attr("src"))
+            }
+        }
 
+        on("User tries to generate foreign bank invoice") {
+            val jsoupDoc = Jsoup.parse(invoiceForeign.document, Charsets.UTF_8.displayName())
+
+            it("html version of invoice should contain correct title") {
+                val invoiceTitle = jsoupDoc.getElementById("invoice-title")
+                val invoiceContractDate = jsoupDoc.getElementById("invoice-contract-date")
+                val expectedTitle = "${employeeDetails.name} Invoice"
+                val expectedContractDate = "Contract dated as of ${employeeDetails.formattedContractDate()}."
+                assertEquals(expectedTitle, invoiceTitle.html().trim())
+                assertEquals(expectedContractDate, invoiceContractDate.html().trim())
+            }
+            it("html version of invoice should contain correct invoice date + invoice number") {
+                val invoiceDate = jsoupDoc.getElementById("invoice-date")
+                val invoiceNumber = jsoupDoc.getElementById("invoice-number")
+
+                assertEquals(employeeDetails.formattedInvoiceDate(Locale.US, "MMMM dd, yyyy"), invoiceDate.html().trim())
+                assertEquals(employeeDetails.getInvoiceNumber(), invoiceNumber.html().trim())
+            }
+            it("html version of invoice should contain correct deadline info") {
+                val deadLineText = jsoupDoc.getElementById("invoice-date-of-service")
+                assertEquals(
+                    "Date of service: ${employeeDetails.getDateOfService(Locale.US)}",
+                    deadLineText.html().trim()
+                )
+            }
+            it("html version of invoice should contain correct vacation section") {
+                val vacationTakenInYear = jsoupDoc.getElementById("invoice-vacation-taken-in-year")
+                val vacationTakenInMonth = jsoupDoc.getElementById("invoice-vacation-taken-in-month")
+                assertEquals("${employeeDetails.vacationDaysInYear}", vacationTakenInYear.html().trim())
+                assertEquals("${employeeDetails.vacationDaysInMonth}", vacationTakenInMonth.html().trim())
+            }
+            it("html version of invoice should contain correct month rate") {
+                val monthRate = jsoupDoc.getElementById("invoice-month-rate")
+                val formatter = NumberFormat.getInstance(Locale("en_US"))
+
+                assertEquals("$ ${formatter.format(employeeDetails.monthRate)}", monthRate.html().trim())
+            }
+
+            it("html file of invoice should contains correct local bank invoice") {
+                val localBankingDetailsName = jsoupDoc.getElementById("local-banking-details-name")
+                val localBankingDetailsAccountNumber = jsoupDoc.getElementById("local-banking-details-account-number")
+                val localBankingDetailsContractorName =
+                    jsoupDoc.getElementById("local-banking-details-beneficiary-name")
+                val localBankingDetailsAddress = jsoupDoc.getElementById("local-banking-details-address")
+
+                val model = localizedLocalBankingDetails.getModel(Locale.ENGLISH)
+                assertEquals(
+                    model.name,
+                    localBankingDetailsName.html().trim()
+                )
+                assertEquals(
+                    model.accountNumber,
+                    localBankingDetailsAccountNumber.html().trim()
+                )
+                assertEquals(
+                    model.beneficiaryName,
+                    localBankingDetailsContractorName.html().trim()
+                )
+                assertEquals(
+                    model.address,
+                    localBankingDetailsAddress.html().trim()
+                )
+            }
             it("html file of invoice should contains correct sign-path") {
                 val signPath = jsoupDoc.getElementById("sign-path")
                 assertEquals("build/resources/main/sign.png", signPath.attr("src"))
