@@ -9,6 +9,7 @@ import freemarker.template.TemplateExceptionHandler
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
+import kotlin.collections.HashMap
 import kotlin.random.Random
 
 abstract class AbstractPdfBankInvoice(
@@ -17,6 +18,9 @@ abstract class AbstractPdfBankInvoice(
     protected open val foreignBankingModel: ForeignBankingModel,
     protected open val templatePath: String
 ) {
+    abstract fun gePlaceholderModel(): HashMap<String, Any?>
+
+    protected fun fullFilledTemplatePath() = "./full_filled_template${Random.nextInt()}.html"
 
     open fun generatePdfFile(): File {
         // Create your Configuration instance, and specify if up to what FreeMarker
@@ -54,8 +58,4 @@ abstract class AbstractPdfBankInvoice(
         out.close()
         return invoiceFile
     }
-
-    protected fun fullFilledTemplatePath() = "./full_filled_template${Random.nextInt()}.html"
-
-    abstract fun gePlaceholderModel(): HashMap<String, Any?>
 }

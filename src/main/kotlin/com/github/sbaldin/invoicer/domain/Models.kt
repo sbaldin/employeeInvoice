@@ -3,7 +3,10 @@ package com.github.sbaldin.invoicer.domain
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
+import java.time.format.TextStyle
+import java.time.temporal.ChronoField
 import java.util.Date
 import java.util.Locale
 
@@ -28,7 +31,8 @@ data class LocalizedLocalBankingModel(
     }
 
     fun getModel(locale: Locale) =
-        modelByLocale[locale] ?: throw IllegalArgumentException("Missing Local Banking Model for giving locale = $locale!")
+        modelByLocale[locale]
+            ?: throw IllegalArgumentException("Missing Local Banking Model for giving locale = $locale!")
 }
 
 data class LocalBankingModel(
@@ -58,7 +62,8 @@ data class EmployeeDetailsModel(
     val additionalExpenses: Int
 ) {
 
-    fun formattedContractDate(pattern: String = "dd.MM.yyyy") = SimpleDateFormat(pattern).format(contractDate)
+    fun formattedContractDate(locale: Locale = Locale.ENGLISH, pattern: String = "dd.MM.yyyy") =
+        SimpleDateFormat(pattern, locale).format(contractDate)
 
     fun formattedInvoiceDate(locale: Locale, pattern: String = "dd MMMM yyyy"): String {
         return if (locale == Locale.US) {
@@ -79,5 +84,18 @@ data class EmployeeDetailsModel(
 
     fun getInvoiceNumber() = getNowLocalDate().run { "$year-${month.value}-SB" }
 
-    fun getDateOfService(locale: Locale) = SimpleDateFormat("LLLL yyyy", locale).format(getNow()).capitalize()
+    fun getDateOfService(locale: Locale): String = DateTimeFormatterBuilder().apply {
+        // Can't find common way to format english and russian date
+        if (locale != Locale.US) {
+            appendText(ChronoField.MONTH_OF_YEAR, TextStyle.FULL_STANDALONE)
+            appendLiteral(" ")
+            appendText(ChronoField.YEAR)
+        } else {
+            appendPattern("MMMM yyyy")
+        }
+    }.toFormatter(locale).format(getNowLocalDate())
+
+    fun abc() {
+
+    }
 }

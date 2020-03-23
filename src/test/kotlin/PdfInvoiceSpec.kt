@@ -9,6 +9,8 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jsoup.Jsoup
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.test.assertEquals
@@ -137,7 +139,10 @@ class PdfInvoiceSpec : Spek({
                 val invoiceDate = jsoupDoc.getElementById("invoice-date")
                 val invoiceNumber = jsoupDoc.getElementById("invoice-number")
 
-                assertEquals(employeeDetails.formattedInvoiceDate(Locale.US, "MMMM dd, yyyy"), invoiceDate.html().trim())
+                assertEquals(
+                    employeeDetails.formattedInvoiceDate(Locale.US, "MMMM dd, yyyy"),
+                    invoiceDate.html().trim()
+                )
                 assertEquals(employeeDetails.getInvoiceNumber(), invoiceNumber.html().trim())
             }
             it("html version of invoice should contain correct deadline info") {
@@ -155,9 +160,15 @@ class PdfInvoiceSpec : Spek({
             }
             it("html version of invoice should contain correct month rate") {
                 val monthRate = jsoupDoc.getElementById("invoice-month-rate")
-                val formatter = NumberFormat.getInstance(Locale("en_US"))
+                val l = DecimalFormatSymbols(Locale.ENGLISH)
+                l.groupingSeparator = ','
+                val df = DecimalFormat("#,###", l).format(employeeDetails.monthRate)
 
-                assertEquals("$ ${formatter.format(employeeDetails.monthRate)}", monthRate.html().trim())
+
+                assertEquals(
+                    "$ ${df.format(employeeDetails.monthRate)}",
+                    monthRate.html().trim()
+                )
             }
 
             it("html file of invoice should contains correct local bank invoice") {

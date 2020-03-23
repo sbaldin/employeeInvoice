@@ -14,14 +14,14 @@ banking:
       accountNumber: 0000 0000 0000 0001 1111
       country: Россия
       address: Казань, пр Ленина, д.1, кв. 1
-      beneficiaryName:  ИП Сергей Сергеевич Сергеев
+      beneficiaryName:  ИП Иванов Иван Иванович
       beneficiaryAddress: Россия, Татарстан, г. Казань, пр. Ленина, д.1., кв. 1
     en:
       name: AO «BANK»
       accountNumber: 0000 0000 0000 0001 0001
       country: Russia
       address: 27 Lenina str., Kazan, 107078, tel +7 495 755-58-58, SWIFT BANKRUM
-      beneficiaryName: IP Sergey Sergeevich Sergeev
+      beneficiaryName: IP Ivanov Ivan Ivanovich
       beneficiaryAddress: PR. LENINA, D. 1, KV. 1, KAZAN, RUSSIA, 650000
   foreign:
     name: BANK

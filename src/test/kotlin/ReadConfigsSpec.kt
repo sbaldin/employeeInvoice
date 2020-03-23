@@ -8,12 +8,6 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import java.io.File
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.ZoneId
-import java.util.TimeZone
-import java.util.Date
 import java.util.Locale
 import kotlin.test.assertEquals
 
@@ -107,25 +101,5 @@ class ReadConfigsSpec : Spek({
     }
 })
 
-private fun getSDF(pattern: String, locale: Locale?) = SimpleDateFormat(pattern, locale).apply {
-    timeZone = TimeZone.getTimeZone("GMT")
-}
 
-fun convertToDate(dateToConvert: LocalDate): Date? {
-    return Date.from(
-        dateToConvert.atStartOfDay()
-            .atZone(ZoneId.systemDefault())
-            .toInstant()
-    )
-}
 
-private fun createTempYamlConfig(runType: AppRunTypeEnum, fileType: ResultFileTypeEnum): File {
-    return File.createTempFile("office", ".yaml").apply {
-        writer().apply {
-            write("app:\n")
-            write("    appRunType: $runType #FOREIGN_BANK_INVOICE #LOCAL_BANK_INVOICE\n")
-            write("    resultFileType: $fileType #OFFICE #PDF\n")
-            write("    outputPath: / #relative path from user home directory\n")
-        }.close()
-    }
-}

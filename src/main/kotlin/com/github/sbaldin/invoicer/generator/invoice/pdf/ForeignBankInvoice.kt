@@ -3,6 +3,7 @@ package com.github.sbaldin.invoicer.generator.invoice.pdf
 import com.github.sbaldin.invoicer.domain.EmployeeDetailsModel
 import com.github.sbaldin.invoicer.domain.ForeignBankingModel
 import com.github.sbaldin.invoicer.domain.LocalBankingModel
+import com.github.sbaldin.invoicer.domain.getDecimalFormatter
 import com.github.sbaldin.invoicer.generator.invoice.InvoiceGenerator
 import com.github.sbaldin.invoicer.generator.invoice.PdfInvoice
 import java.util.Locale
@@ -26,6 +27,7 @@ class ForeignBankInvoice(
 
     override fun gePlaceholderModel(): HashMap<String, Any?> {
         val root = HashMap<String, Any?>()
+
         root["employee"] = employeeDetails
         root["dateOfService"] = employeeDetails.getDateOfService(Locale.ENGLISH)
         root["localBankingDetails"] = localBankingModel
@@ -35,6 +37,7 @@ class ForeignBankInvoice(
         root["formattedInvoiceDate"] = employeeDetails.formattedInvoiceDate(Locale.US, "MMMM dd, yyyy")
         root["localBankingDetails"] = localBankingModel
         root["foreignBankingDetails"] = foreignBankingModel
+        root["monthRate"] = getDecimalFormatter().format(employeeDetails.monthRate)
         root["signPath"] = "./" + employeeDetails.signPath
         if (employeeDetails.signPath.isNotBlank()) {
             root["signPath"] = "./" + employeeDetails.signPath

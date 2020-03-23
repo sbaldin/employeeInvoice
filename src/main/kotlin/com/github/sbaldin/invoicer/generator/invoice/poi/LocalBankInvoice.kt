@@ -3,6 +3,7 @@ package com.github.sbaldin.invoicer.generator.invoice.poi
 import com.github.sbaldin.invoicer.domain.EmployeeDetailsModel
 import com.github.sbaldin.invoicer.domain.ForeignBankingModel
 import com.github.sbaldin.invoicer.domain.LocalBankingModel
+import com.github.sbaldin.invoicer.domain.getDecimalFormatter
 import com.github.sbaldin.invoicer.generator.invoice.InvoiceGenerator
 import com.github.sbaldin.invoicer.generator.invoice.PoiInvoice
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment
@@ -69,7 +70,7 @@ class LocalBankInvoice(
                    за ${employeeDetails.formattedInvoiceDate(Locale("ru"))}."""
 
             setTextWithDefaultStyle(tableRowTwo.getCell(0), jobDesc)
-            setTextWithDefaultStyle(tableRowTwo.getCell(1), "$ ${employeeDetails.monthRate}")
+            setTextWithDefaultStyle(tableRowTwo.getCell(1), "$ ${getDecimalFormatter().format(employeeDetails.monthRate)}")
 
             val tableRowThree: XWPFTableRow = rows[2]
 
