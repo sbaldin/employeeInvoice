@@ -1,6 +1,6 @@
 
 # Invoice Utility
-[![Build Status](https://api.travis-ci.org/jeremymailen/kotlinter-gradle.svg?branch=master)](https://travis-ci.org/jeremymailen/kotlinter-gradle)
+[![Build Status](https://travis-ci.org/sbaldin/employeeInvoice.svg?branch=master)](https://travis-ci.org/sbaldin/employeeInvoice)
 
 Kotlin console utility to generate the employee's payment invoice. 
 Can generate invoices as PDF or XLSX files for local and foreign banking operations.  
