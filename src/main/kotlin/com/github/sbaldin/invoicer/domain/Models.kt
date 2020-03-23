@@ -94,8 +94,4 @@ data class EmployeeDetailsModel(
             appendPattern("MMMM yyyy")
         }
     }.toFormatter(locale).format(getNowLocalDate())
-
-    fun abc() {
-
-    }
 }

@@ -2,7 +2,8 @@ import com.github.sbaldin.invoicer.domain.AppRunTypeEnum
 import com.github.sbaldin.invoicer.domain.ResultFileTypeEnum
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.TimeZone
 
 fun createTempYamlConfig(runType: AppRunTypeEnum, fileType: ResultFileTypeEnum): File {
     return File.createTempFile("office", ".yaml").apply {
@@ -15,6 +16,6 @@ fun createTempYamlConfig(runType: AppRunTypeEnum, fileType: ResultFileTypeEnum):
     }
 }
 
-fun getSDF(pattern: String, locale: Locale?) = SimpleDateFormat(pattern, locale).apply {
+fun getSDF(pattern: String, locale: Locale) = SimpleDateFormat(pattern, locale).apply {
     timeZone = TimeZone.getTimeZone("GMT")
 }

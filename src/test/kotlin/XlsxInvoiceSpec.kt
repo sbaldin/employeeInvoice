@@ -17,7 +17,7 @@ import java.io.File
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import kotlin.test.assertEquals
 
 class XlsxInvoiceSpec : Spek({
@@ -83,7 +83,6 @@ class XlsxInvoiceSpec : Spek({
                 withFirstSheet(workbook) {
                     assertEquals("${employeeDetails.vacationDaysInMonth}", getCellValue(7, 1))
                     assertEquals("${employeeDetails.vacationDaysInYear}", getCellValue(8, 1))
-
                 }
             }
 
@@ -115,7 +114,6 @@ private fun createDecimalFormat(): DecimalFormat {
     l.groupingSeparator = ','
     return DecimalFormat("#,###", l)
 }
-
 
 private fun withFirstSheet(workbook: XSSFWorkbook, body: XSSFSheet.() -> Unit) {
     workbook.apply {

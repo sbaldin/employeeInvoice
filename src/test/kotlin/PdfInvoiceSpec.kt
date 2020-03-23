@@ -145,13 +145,6 @@ class PdfInvoiceSpec : Spek({
                 )
                 assertEquals(employeeDetails.getInvoiceNumber(), invoiceNumber.html().trim())
             }
-            it("html version of invoice should contain correct deadline info") {
-                val deadLineText = jsoupDoc.getElementById("invoice-date-of-service")
-                assertEquals(
-                    "Date of service: ${employeeDetails.getDateOfService(Locale.US)}",
-                    deadLineText.html().trim()
-                )
-            }
             it("html version of invoice should contain correct vacation section") {
                 val vacationTakenInYear = jsoupDoc.getElementById("invoice-vacation-taken-in-year")
                 val vacationTakenInMonth = jsoupDoc.getElementById("invoice-vacation-taken-in-month")
@@ -163,7 +156,6 @@ class PdfInvoiceSpec : Spek({
                 val l = DecimalFormatSymbols(Locale.ENGLISH)
                 l.groupingSeparator = ','
                 val df = DecimalFormat("#,###", l).format(employeeDetails.monthRate)
-
 
                 assertEquals(
                     "$ ${df.format(employeeDetails.monthRate)}",

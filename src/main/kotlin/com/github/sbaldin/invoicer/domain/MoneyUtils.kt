@@ -2,7 +2,7 @@ package com.github.sbaldin.invoicer.domain
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.*
+import java.util.Locale
 
 private var defaultDecimalFormatter: DecimalFormat? = null
 
@@ -16,4 +16,3 @@ fun getDecimalFormatter(): DecimalFormat {
         defaultDecimalFormatter
     }!!
 }
-

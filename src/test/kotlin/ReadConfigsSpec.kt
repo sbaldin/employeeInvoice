@@ -78,7 +78,7 @@ class ReadConfigsSpec : Spek({
                 assertEquals("0000 0000 0000 0001 1111", localBankingDetails.accountNumber)
                 assertEquals("Россия", localBankingDetails.country)
                 assertEquals("Казань, пр Ленина, д.1, кв. 1", localBankingDetails.address)
-                assertEquals("ИП Сергей Сергеевич Сергеев", localBankingDetails.beneficiaryName)
+                assertEquals("ИП Иванов Иван Иванович", localBankingDetails.beneficiaryName)
                 assertEquals(
                     "Россия, Татарстан, г. Казань, пр. Ленина, д.1., кв. 1",
                     localBankingDetails.beneficiaryAddress
@@ -94,12 +94,9 @@ class ReadConfigsSpec : Spek({
                     "27 Lenina str., Kazan, 107078, tel +7 495 755-58-58, SWIFT BANKRUM",
                     localBankingDetails.address
                 )
-                assertEquals("IP Sergey Sergeevich Sergeev", localBankingDetails.beneficiaryName)
+                assertEquals("IP Ivanov Ivan Ivanovich", localBankingDetails.beneficiaryName)
                 assertEquals("PR. LENINA, D. 1, KV. 1, KAZAN, RUSSIA, 650000", localBankingDetails.beneficiaryAddress)
             }
         }
     }
 })
-
-
-
