@@ -7,7 +7,7 @@ interface InvoiceGenerator {
     fun generate(): Invoice
 }
 
-interface Invoice{
+interface Invoice {
     val name: String
 }
 
@@ -19,4 +19,4 @@ class PoiInvoice(
 class PdfInvoice(
     val document: File,
     override val name: String
-): Invoice
+) : Invoice

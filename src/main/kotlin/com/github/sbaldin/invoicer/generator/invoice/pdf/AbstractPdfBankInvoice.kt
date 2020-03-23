@@ -9,13 +9,18 @@ import freemarker.template.TemplateExceptionHandler
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
-import java.util.*
+import kotlin.collections.HashMap
+import kotlin.random.Random
 
 abstract class AbstractPdfBankInvoice(
     protected open val employeeDetails: EmployeeDetailsModel,
     protected open val localBankingModel: LocalBankingModel,
     protected open val foreignBankingModel: ForeignBankingModel,
-    protected open val templatePath: String) {
+    protected open val templatePath: String
+) {
+    abstract fun gePlaceholderModel(): HashMap<String, Any?>
+
+    protected fun fullFilledTemplatePath() = "./full_filled_template${Random.nextInt()}.html"
 
     open fun generatePdfFile(): File {
         // Create your Configuration instance, and specify if up to what FreeMarker
@@ -38,23 +43,19 @@ abstract class AbstractPdfBankInvoice(
         cfg.templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
         cfg.setClassForTemplateLoading(javaClass, "/")
 
-
         /* Create a data-model */
         val root = gePlaceholderModel()
 
         /* Get the template (uses cache internally) */
-        val temp: Template = cfg.getTemplate(templatePath)
+        val template: Template = cfg.getTemplate(templatePath)
 
         /* Merge data-model with template */
-        val htmlFilePath = "./filled_template${Random().nextInt()}.html"
-        val invoiceFile = File(htmlFilePath)
+        val invoiceFile = File(fullFilledTemplatePath())
         val out = OutputStreamWriter(FileOutputStream(invoiceFile))
-        temp.process(root, out)
+        template.process(root, out)
         // Note: Depending on what `out` is, you may need to call `out.close()`.
         // This is usually the case for file output, but not for servlet output.
         out.close()
         return invoiceFile
     }
-
-    abstract fun gePlaceholderModel():HashMap<String, Any?>
 }

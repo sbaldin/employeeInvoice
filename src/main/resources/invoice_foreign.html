@@ -89,7 +89,7 @@
         .signature img {
             position: absolute;
             display: block;
-            left: 120px;
+            left: 135px;
             top: -15px;
         }
     </style>
@@ -98,24 +98,24 @@
 
 <body>
 
-<h1>${employee.name} Invoice</h1>
+<h1 id="invoice-title">${employee.name} Invoice</h1>
 
-<p>Contract dated as of ${formattedContractDate}.</p>
+<p id="invoice-contract-date">Contract dated as of ${formattedContractDate}.</p>
 
 <table class="root">
 
     <tr>
         <td>Invoice date:</td>
-        <td>${formattedInvoiceDate}</td>
+        <td id="invoice-date">${formattedInvoiceDate}</td>
     </tr>
     <tr>
         <td>Invoice number:</td>
-        <td>${employee.invoiceNumber}</td>
+        <td id="invoice-number">${employee.invoiceNumber}</td>
     </tr>
 
 </table>
 
-<p class="bold">Date of service: ${dateOfService}</p>
+<p class="bold" id="invoice-date-of-service">Date of service: ${dateOfService}</p>
 
 <table>
 
@@ -129,11 +129,11 @@
 
     <tr>
         <td>Total number of vacation days taken in this calendar year:</td>
-        <td>${employee.vacationDaysInYear}</td>
+        <td id="invoice-vacation-taken-in-year">${employee.vacationDaysInYear}</td>
     </tr>
     <tr>
         <td>Number of vacation days taken in the invoiced month:</td>
-        <td>${employee.vacationDaysInMonth}</td>
+        <td id="invoice-vacation-taken-in-month">${employee.vacationDaysInMonth}</td>
     </tr>
 </table>
 
@@ -141,7 +141,7 @@
 
     <tr>
         <td>Full Month Rate:</td>
-        <td>$ ${employee.monthRate}</td>
+        <td id="invoice-month-rate" >$ ${monthRate}</td>
     </tr>
     <tr>
         <td>Additional Expenses:</td>
@@ -166,36 +166,36 @@
 
     <tr>
         <td>Bank Name:</td>
-        <td>${localBankingDetails.name}</td>
+        <td id="local-banking-details-name">${localBankingDetails.name}</td>
     </tr>
     <tr>
         <td>Account Number:</td>
-        <td>${localBankingDetails.accountNumber}</td>
+        <td id="local-banking-details-account-number">${localBankingDetails.accountNumber}</td>
     </tr>
     <tr>
         <td>Bank Country:</td>
-        <td>${localBankingDetails.country}</td>
+        <td id="local-banking-details-country">${localBankingDetails.country}</td>
     </tr>
     <tr>
         <td class="address-cell-title">Bank Address and contact tel #</td>
-        <td class="address-cell-value">${localBankingDetails.address}</td>
+        <td class="address-cell-value" id="local-banking-details-address">${localBankingDetails.address}</td>
     </tr>
 
     <tr>
         <td>Beneficiary Name
         </td>
-        <td>${localBankingDetails.beneficiaryName}</td>
+        <td id="local-banking-details-beneficiary-name" >${localBankingDetails.beneficiaryName}</td>
     </tr>
 
     <tr>
         <td class="address-cell-title">Your Address that you linked to that bank account
         </td>
-        <td class="address-cell-value">${localBankingDetails.beneficiaryAddress}</td>
+        <td class="address-cell-value" id="local-banking-details-beneficiary-address">${localBankingDetails.beneficiaryAddress}</td>
     </tr>
 </table>
 
 <div>
-    <p class="bold signature">Signature <span class="sign-line"> </span> <#if employee.signPath??><img src="${employee.signPath}" alt=""><#else></#if> </p>
+    <p class="bold signature">Signature <span class="sign-line"> </span> <#if employee.signPath??><img id="sign-path" src="${employee.signPath}" alt=""><#else></#if> </p>
 </div>
 
 </body>

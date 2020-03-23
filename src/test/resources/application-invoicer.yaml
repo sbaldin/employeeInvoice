@@ -1,0 +1,9 @@
+app:
+  appRunType: BOTH #FOREIGN_BANK_INVOICE #LOCAL_BANK_INVOICE,
+  resultFileType: PDF #OFFICE #PDF
+  outputPath: / #relative path from user home directory
+
+
+
+
+

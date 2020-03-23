@@ -1,4 +1,3 @@
-import java.time.LocalDate
 
 buildscript {
 
@@ -10,6 +9,7 @@ buildscript {
         poiVersion = '3.12'
         konfVersion = '0.20.0'
         mockkversion = '1.9'
+        junitVersion = '1.0.2'
         userHomePath = System.properties["user.home"]
         destinationPath = userHomePath + "/.${rootProject.name}"
     }
@@ -22,17 +22,21 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
+
 
 plugins {
     id "org.jetbrains.kotlin.jvm" version '1.3.60'
     id "application"
     id "com.github.johnrengelman.shadow" version "5.0.0"
+    id "org.jmailen.kotlinter" version "2.3.2"
+    id "org.jlleitschuh.gradle.ktlint-idea" version "9.2.1"
 }
 
 group 'com.github.sbaldin'
-version '0.3.2'
+version '0.3.3'
 
 mainClassName = "com.github.sbaldin.invoicer.ApplicationKt"
 defaultTasks 'run'
@@ -40,6 +44,16 @@ defaultTasks 'run'
 repositories {
     mavenCentral()
 }
+
+kotlinter {
+    ignoreFailures = false
+    indentSize = 4
+    reporters = ['checkstyle', 'plain']
+    experimentalRules = true
+    disabledRules = ['import-ordering', 'final-newline']
+    fileBatchSize = 30
+}
+
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -63,6 +77,7 @@ dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
 
     testCompile "io.mockk:mockk:${mockkversion}"
+    testCompile 'org.jsoup:jsoup:1.10.3'
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
 
     testCompile("org.jetbrains.spek:spek-api:$spekVersion") {
@@ -75,6 +90,11 @@ dependencies {
         exclude group: 'org.junit.platform'
         exclude group: 'org.jetbrains.kotlin'
     }
+
+    testRuntime "org.junit.platform:junit-platform-runner:$junitVersion"
+    testRuntime "org.junit.platform:junit-platform-console:$junitVersion"
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.2'
 }
 
 compileKotlin {
@@ -83,9 +103,13 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+test{
+    useJUnitPlatform {
+        includeEngines 'spek'
+    }
+}
 
 //build.dependsOn shadowJar
-
 jar {
     zip64 true
     manifest {

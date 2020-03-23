@@ -18,4 +18,5 @@ gradle-app.setting
 
 /out
 /.idea/
+/logs
 /logs/
