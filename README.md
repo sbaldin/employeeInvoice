@@ -13,12 +13,9 @@ You can run following Gradle command to generate signed PDF invoices with defaul
 ```
 Also you can provide your own params by specifing path to config file:
 ```
- ./gradlew runShadow -Pjargs="path/to/application.yaml"
+ ./gradlew runShadow -DappConfig="/home/sbaldin/.invoicer/application.yaml" -DemployeeConfig="/home/sbaldin/.invoicer/employee.yaml" -DinvoiceDate="25.04.2020"
 ```
-or you have assembled jar:
-```
-java -jar invoicer.jar path/to/application.yaml
-```
+
 ### Installing
 To install assembled fat jar and default application.yaml to hidden folder `.invoicer` in the user home directory use following command:
 ```
