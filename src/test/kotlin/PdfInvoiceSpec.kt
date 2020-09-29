@@ -131,7 +131,7 @@ class PdfInvoiceSpec : Spek({
                 val invoiceTitle = jsoupDoc.getElementById("invoice-title")
                 val invoiceContractDate = jsoupDoc.getElementById("invoice-contract-date")
                 val expectedTitle = "${employeeDetails.name} Invoice"
-                val expectedContractDate = "Contract dated as of ${employeeDetails.formattedContractDate()}."
+                val expectedContractDate = "Contract dated as of ${employeeDetails.formattedContractDate(Locale.US,"MMMM dd, yyyy")}."
                 assertEquals(expectedTitle, invoiceTitle.html().trim())
                 assertEquals(expectedContractDate, invoiceContractDate.html().trim())
             }
