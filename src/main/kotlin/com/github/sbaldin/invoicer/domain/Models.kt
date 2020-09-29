@@ -86,12 +86,9 @@ data class EmployeeDetailsModel(
 
     fun getDateOfService(locale: Locale): String = DateTimeFormatterBuilder().apply {
         // Can't find common way to format english and russian date
-        if (locale != Locale.US) {
-            appendText(ChronoField.MONTH_OF_YEAR, TextStyle.FULL_STANDALONE)
-            appendLiteral(" ")
-            appendText(ChronoField.YEAR)
-        } else {
-            appendPattern("MMMM yyyy")
-        }
+        val textStyle = if (locale == Locale("RU")) TextStyle.FULL_STANDALONE else TextStyle.FULL
+        appendText(ChronoField.MONTH_OF_YEAR, textStyle)
+        appendLiteral(" ")
+        appendText(ChronoField.YEAR)
     }.toFormatter(locale).format(getNowLocalDate())
 }
