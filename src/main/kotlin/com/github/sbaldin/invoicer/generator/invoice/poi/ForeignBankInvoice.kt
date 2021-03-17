@@ -27,6 +27,7 @@ class ForeignBankInvoice(
 
                         val invoiceDate = DateTimeFormatter.ofPattern("MMMM dd, yyyy").withLocale(Locale.ENGLISH).format(getNowLocalDate())
 
+                        setRowValue(rowIndex++, 0, "Purchase Order Number: ${employeeDetails.purchaseOrderNumber}")
                         setRowValue(rowIndex++, 0, "Invoice date: $invoiceDate")
                         setRowValue(rowIndex++, 0, "Contract: dated as of ${employeeDetails.formattedContractDate(pattern = "MMMM dd, yyyy")}")
                         setRowValue(rowIndex++, 0, "Invoice number: ${employeeDetails.getInvoiceNumber()}")

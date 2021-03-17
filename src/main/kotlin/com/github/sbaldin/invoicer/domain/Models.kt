@@ -53,6 +53,7 @@ data class ForeignBankingModel(
 
 data class EmployeeDetailsModel(
     val name: String,
+    val purchaseOrderNumber: String,
     val signPath: String,
     val contractDate: Date,
     val serviceProvider: String,

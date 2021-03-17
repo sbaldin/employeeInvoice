@@ -1,5 +1,6 @@
 employee:
   name: Ivan Ivanov
+  purchaseOrderNumber: 1234567890
   contractDate: 1970-01-01
   serviceProvider: Platform Development
   vacationDaysInMonth: 1

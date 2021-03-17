@@ -65,44 +65,46 @@ class XlsxInvoiceSpec : Spek({
             it("invoice should contain correct invoice info") {
                 withFirstSheet(workbook) {
                     val invoiceDate = dateTimeFormatter.format(getNowLocalDate())
+                    val purchaseOrderNumber = employeeDetails.purchaseOrderNumber
 
-                    assertEquals("Invoice date: $invoiceDate", getCellValue(1, 0))
+                    assertEquals("Purchase Order Number: $purchaseOrderNumber", getCellValue(1, 0))
+                    assertEquals("Invoice date: $invoiceDate", getCellValue(2, 0))
                     assertEquals(
                         "Contract: dated as of ${employeeDetails.formattedContractDate(pattern = "MMMM dd, yyyy")}",
-                        getCellValue(2, 0)
+                        getCellValue(3, 0)
                     )
-                    assertEquals("Invoice number: ${employeeDetails.getInvoiceNumber()}", getCellValue(3, 0))
+                    assertEquals("Invoice number: ${employeeDetails.getInvoiceNumber()}", getCellValue(4, 0))
                     assertEquals(
                         "Date of service: ${employeeDetails.getDateOfService(Locale.ENGLISH)}",
-                        getCellValue(4, 0)
+                        getCellValue(5, 0)
                     )
                 }
             }
 
             it("invoice should contain correct vacation days taken in month and year") {
                 withFirstSheet(workbook) {
-                    assertEquals("${employeeDetails.vacationDaysInMonth}", getCellValue(7, 1))
-                    assertEquals("${employeeDetails.vacationDaysInYear}", getCellValue(8, 1))
+                    assertEquals("${employeeDetails.vacationDaysInMonth}", getCellValue(8, 1))
+                    assertEquals("${employeeDetails.vacationDaysInYear}", getCellValue(9, 1))
                 }
             }
 
             it("invoice should contain correct month rate") {
                 withFirstSheet(workbook) {
-                    assertEquals(decimalFormat.format(employeeDetails.monthRate), getCellValue(10, 1))
-                    assertEquals("0", getCellValue(11, 1)) // temporary do not add additional expenses
-                    assertEquals(decimalFormat.format(employeeDetails.monthRate), getCellValue(13, 1)) // temporary do not add additional expenses
+                    assertEquals(decimalFormat.format(employeeDetails.monthRate), getCellValue(11, 1))
+                    assertEquals("0", getCellValue(12, 1)) // temporary do not add additional expenses
+                    assertEquals(decimalFormat.format(employeeDetails.monthRate), getCellValue(14, 1)) // temporary do not add additional expenses
                 }
             }
 
             it("invoice should contain correct local banking info") {
                 withFirstSheet(workbook) {
-                    assertEquals(localBankingModel.name, getCellValue(17, 1))
-                    assertEquals(localBankingModel.accountNumber, getCellValue(18, 1))
-                    assertEquals(localBankingModel.country, getCellValue(19, 1))
-                    assertEquals(localBankingModel.address, getCellValue(20, 1))
+                    assertEquals(localBankingModel.name, getCellValue(18, 1))
+                    assertEquals(localBankingModel.accountNumber, getCellValue(19, 1))
+                    assertEquals(localBankingModel.country, getCellValue(20, 1))
+                    assertEquals(localBankingModel.address, getCellValue(21, 1))
 
-                    assertEquals(localBankingModel.beneficiaryName, getCellValue(27, 1))
-                    assertEquals(localBankingModel.beneficiaryAddress, getCellValue(28, 1))
+                    assertEquals(localBankingModel.beneficiaryName, getCellValue(28, 1))
+                    assertEquals(localBankingModel.beneficiaryAddress, getCellValue(29, 1))
                 }
             }
         }

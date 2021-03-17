@@ -1,5 +1,6 @@
 employee:
   name: Ivan Ivanov
+  purchaseOrderNumber: 1234567890
   contractDate: 2019-12-31
   serviceProvider: Platform Development
   vacationDaysInMonth: 10
@@ -14,7 +15,7 @@ banking:
       accountNumber: 0000 0000 0000 0001 1111
       country: Россия
       address: Казань, пр Ленина, д.1, кв. 1
-      beneficiaryName:  ИП Иванов Иван Иванович
+      beneficiaryName: ИП Иванов Иван Иванович
       beneficiaryAddress: Россия, Татарстан, г. Казань, пр. Ленина, д.1., кв. 1
     en:
       name: AO «BANK»
